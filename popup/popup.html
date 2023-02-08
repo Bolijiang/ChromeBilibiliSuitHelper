@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="css/fan_card.css">
+        <link rel="stylesheet" href="css/popup.css">
+        <link rel="stylesheet" href="css/suit_content_buy_number.css">
+    </head>
+    <body>
+        <div style="float: left;">
+            <div class="fan_card_list_box" id="fan_card_list_box">
+                <ul id="fan_card_list"></ul>
+            </div>
+            <div>
+                <button class="fan_card_button" id="update_items_button" title="更新装扮列表">更新装扮列表</button>
+                <button class="fan_card_button" id="sort_items_button" title="应用上放装扮排序">应用</button>
+            </div>
+        </div>
+
+        <span id="line"></span>
+
+        <div id="suit_content_box" style="float: left;">
+            <div class="suit_content_item_box">
+                <div class="suit_content_title">
+                    <span class="suit_content_title_name">排序方法</span>
+                    <span class="suit_content_title_line"></span>
+                </div>
+                <div id="suit_content_sort_button" class="suit_content_items">
+                    <button data-mod="number">number</button>
+                    <button data-mod="own_num">own_num</button>
+                    <button data-mod="time_begin">time_begin</button>
+                </div>
+            </div>
+            <!-- 库存编号 -->
+            <div class="suit_content_item_box">
+                <div class="suit_content_title">
+                    <span class="suit_content_title_name">库存编号</span>
+                    <span class="suit_content_title_line"></span>
+                </div>
+                <div id="suit_content_buy_number" class="suit_content_items"></div>
+            </div>
+        </div>
+
+        <script src="js/animate.js"></script>
+        <script src="js/utils.js"></script>
+        <script src="js/chrome.js"></script>
+        <script src="js/module.js"></script>
+        <script src="js/load.js"></script>
+        <script src="js/popup.js"></script>
+    </body>
+</html>

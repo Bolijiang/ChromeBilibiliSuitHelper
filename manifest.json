@@ -1,0 +1,28 @@
+{
+    "name": "BiliSuitHelper",
+    "description": "Web端装扮工具",
+    "version": "0.0.1",
+    "manifest_version": 3,
+    "permissions": [
+        "tabs", 
+        "downloads",
+        "storage"
+    ],
+    "background": {
+        "service_worker": "background/background.js"
+    },
+    "content_scripts": [
+        {
+            "js": [
+                "content/request.js", 
+                "content/content.js"
+            ],
+            "matches": [
+                "*://*.bilibili.com/*"
+            ]
+        }
+    ],
+    "action": {
+        "default_popup": "popup/popup.html"
+    }
+}

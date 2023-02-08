@@ -1,0 +1,82 @@
+body {
+    background-color: rgb(32, 32, 32);
+    width: 530px;
+}
+
+span {
+    display:block;
+}
+
+#line {
+    position: absolute;
+    top: 10px;
+    left: 270px;
+    background-color: rgba(255, 255, 255, 1);
+    width: 3px;
+    height: 443px;
+    border-radius: 3px;
+}
+
+
+#suit_content_box {
+    position: relative;
+    background-color: aqua;
+    height: 445px;
+    width: 265px;
+    left: 17px;
+    overflow: auto;
+}
+
+#suit_content_box::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+}
+
+#suit_content_box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+#suit_content_box .suit_content_title_name {
+    float: left;
+    background-color: rgb(180, 180, 180);
+    user-select: none;
+    font-weight: bold;
+    font-size: auto;
+    height: 20px;
+    width: 50px;
+    line-height: 20px;
+    color: white;
+    position: relative;
+}
+
+#suit_content_box .suit_content_title_line {
+    float: left;
+    background-color: rgb(255, 255, 255);
+    user-select: none;
+
+    height: 4px;
+    width: 210px;
+
+    position: relative;
+    top: 16px;
+}
+
+#suit_content_box .suit_content_item_box {
+    width: 260px;
+    background-color: brown;
+    position: relative;
+}
+
+.suit_content_title {
+    width: 260px;
+    height: 20px;
+    background-color: aquamarine;
+}
+
+.suit_content_items {
+    position: relative;
+    width: 260px;
+    overflow: hidden;
+}

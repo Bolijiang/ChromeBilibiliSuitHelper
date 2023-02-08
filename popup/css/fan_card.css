@@ -1,0 +1,137 @@
+@font-face {
+    font-family: "fansCard";
+    src:url("/popup/font/fansCard.ttf");
+}
+
+.fan_card_list_box {
+    background-color: transparent;
+    width: 255px;
+    height: 400px;
+    overflow: auto;
+}
+
+.fan_card_list_box::-webkit-scrollbar {
+    width: 5px;
+    background-color: transparent;
+}
+
+.fan_card_list_box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+.fan_card_image_box {
+    background-color: transparent;
+    height: 100px;
+    width: 250px;
+    user-select: none;
+    border-radius: 8px;
+}
+
+.fan_card_image_box img {
+    width: 250px; 
+    height: 100px;
+    background-size: cover;
+    object-fit: cover;
+    user-select: none;
+    border-radius: 8px;
+}
+
+#fan_card_list {
+    background-color: transparent;
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    width: 250px;
+}
+
+.fan_card {
+    background-color: transparent;
+    margin: 5px 0;
+    cursor: pointer;
+    position: relative;
+    border-radius: 8px;
+}
+
+.fan_card span {
+    position: absolute;
+}
+
+.fan_card .fan_card_number_text, .fan_card_date_text {
+    color: rgba(255, 255, 255, 0.5);
+    left: 10px;
+}
+
+.fan_card .fan_card_number_text {
+    top: 32px;
+    color: rgba(255, 255, 255, 1);
+    left: 10px;
+}
+
+.fan_card .fan_card_date_text {
+    top: 65px;
+    color: rgba(255, 255, 255, 1);
+    left: 10px;
+}
+
+.fan_card .fan_card_name {
+    top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgba(255, 255, 255, 1);
+    left: 10px;
+}
+
+.fan_card .fan_card_number {
+    color: rgba(255, 255, 255, 1);
+    left: 10px;
+    font-family: "fansCard";
+    top: 47px;
+    font-size: 14px;
+}
+
+.fan_card .fan_card_date {
+    color: rgba(255, 255, 255, 1);
+    left: 10px;
+    top: 80px;
+}
+
+.fan_card .fan_card_own_num {
+    right: 6px;
+    bottom: 4px;
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 40px;
+    height: 12px;
+    border-radius: 20px;
+    font-family: "fansCard";
+    color: #ffffff;
+    text-align: center;
+    font-size: 12px;
+}
+
+.fan_card_button {
+    margin: 5px 0;
+    height: 40px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 300ms;
+    background-color: rgba(240, 240, 240, 0.8);
+    color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    border-style: none;
+    cursor: pointer;
+}
+
+.fan_card_button:hover {
+    background-color: rgba(240, 240, 240, 1);
+    color: rgba(0, 0, 0, 1);
+}
+
+#update_items_button {
+    width: 212px;
+}
+
+#sort_items_button {
+    width: 40px;
+}
