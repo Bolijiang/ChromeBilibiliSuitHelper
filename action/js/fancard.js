@@ -97,7 +97,7 @@ function parseItem(item) {
         "number": item["fan"]["number"],
         "date": item["fan"]["date"],
         "own_num": item["own_num"],
-        "time_begin": parseInt(item["item"]["properties"]["sale_time_begin"]),
+        "time_begin": parseInt(item["item"]["properties"]["sale_time_begin"]) || -1,
         "fan_share_image": item["item"]["properties"]["fan_share_image"],
     };
 };
