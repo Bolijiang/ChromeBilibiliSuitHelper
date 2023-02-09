@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="css/popup.css">
+    <link rel="stylesheet" href="css/line.css">
+    <link rel="stylesheet" href="css/suit-fan-card.css">
+    <link rel="stylesheet" href="css/suit-list-item-box.css">
+    <script src="js/utils.js"></script>
+    <script src="js/constValue.js"></script>
+    <script src="js/chrome.js"></script>
+</head>
+<body id="popup-body">
+    <!-- 装扮列表 [内容+信息+按钮] -->
+    <div class="box suit-list-item-box">
+        <!-- 信息 -->
+        <div class="suit-list-text">
+            <a id="suit-amount">共???套</a>
+            <button id="suit-reverse-button">反向</button>
+        </div>
+        <!-- 内容 -->
+        <div class="suit-list-box">
+            <ul id="suit-list"></ul>
+        </div>
+        <!-- 按钮 -->
+        <div class="suit-list-botton-box">
+            <div class="suit-list-botton">
+                <button id="update-suit-list">更新装扮列表</button>
+                <button id="apply-suit-list">应用</button>
+            </div>
+            <div class="suit-list-select">
+                <select id="suitlist-sort-option">
+                    <option value="">排序方式</option>
+                    <option value="number">粉丝编号</option>
+                    <option value="own_num">库存数量</option>
+                    <option value="time_begin">开售时间</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- 分割线 -->
+    <div class="box line-box">
+        <span class="line"></span>
+    </div>
+
+    <div class="box test">
+
+    </div>
+    <script src="js/animation.js"></script>
+    <script src="js/fancard.js"></script>
+    <script src="js/popup.js"></script>
+</body>
+</html>

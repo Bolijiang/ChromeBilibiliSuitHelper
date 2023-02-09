@@ -1,0 +1,16 @@
+body {
+    margin: 5px;
+    height: 590px;
+    width: 700px;
+}
+
+.box {
+    position: relative;
+    float: left;
+}
+
+.test {
+    background-color: black;
+    width: 200px;
+    height: 100%;
+}

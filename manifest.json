@@ -6,7 +6,8 @@
     "permissions": [
         "tabs", 
         "downloads",
-        "storage"
+        "storage",
+        "contextMenus"
     ],
     "background": {
         "service_worker": "background/background.js"
@@ -14,6 +15,7 @@
     "content_scripts": [
         {
             "js": [
+                "content/utils.js",
                 "content/request.js", 
                 "content/content.js"
             ],
@@ -22,7 +24,8 @@
             ]
         }
     ],
+    "options_page": "options/options.html",
     "action": {
-        "default_popup": "popup/popup.html"
+        "default_popup": "action/popup.html"
     }
 }

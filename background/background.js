@@ -1,62 +1,48 @@
-function addParams(_url, params) {
-    // 往url添加Params
-    if (!params) {
-        return _url;
-    }
-    var url = _url + "?"
-    for(let key in params) {
-        url += `${key}=${params[key]}&`
-    };
-    return url.slice(0, url.length-1);
-};
-
-function httpRequest(data) {
-    const url = addParams(data.url, data["params"]);
-    return new Promise(function (resolve, reject) {
-        fetch(url, {
-            method: data.method,
-            credentials: "include",
-            mode:'cors',
-            headers: {
-                "Content-Type": data["content_type"],
-            },
-            body: data["body"],
-        }).then(function(response) {
-            return response.text();
-        }).then(function(body) {
-            resolve(body);
-        }).catch(function(error) {
-            reject(error);
+function setLocalContent(content) {
+    // 保存数据到本地
+    return new Promise(function (resolve, _) {
+        chrome.storage.local.set(content, function() {
+            resolve(content);
         });
     });
 };
 
-async function getAssetListRes(data) {
-    // 获取 suit/asset/list 内容
-    const url = "https://api.bilibili.com/x/garb/user/suit/asset/list";
-    const res_text = await httpRequest({method: "GET", url: url, params: {
-        "part": "suit", "state": "active", "is_fans": "true", 
-        "ps": data.ps, "pn": data.pn
-    }});
-    return res_text;
+function getLocalContent(key) {
+    // 获取本地数据
+    return new Promise(function (resolve, _) {
+        chrome.storage.local.get([key], function(value) {
+            resolve(value[key]);
+        });
+    });
 };
 
-async function getFannumListRes(data) {
-    // 获取 user/fannum/list 内容
-    const url = "https://api.bilibili.com/x/garb/user/fannum/list";
-    const res_text = await httpRequest({method: "GET", url: url, params: {
-        "item_id": data.item_id
-    }});
-    return res_text
-}
+// -----------------------------------------------------
 
- 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.key == "getAssetListRes") {
-        getAssetListRes(message.value).then(sendResponse);
+chrome.contextMenus.create({
+    // 注册右键组件
+    id: "test",
+    title: "test",
+    type: 'normal'
+});
+
+// -----------------------------------------------------
+
+async function initializeConfig() {
+    // 初始化设置
+    var config = await getLocalContent("config") || {"style": {}};;
+    if (!config["style"]["popup-background-color"]) {
+        config["style"]["popup-background-color"] = "#202020";
     };
-    if (message.key == "getFannumListRes") {
-        getFannumListRes(message.value).then(sendResponse);
-    };
-    return true;
+    await setLocalContent({"config": config});
+    // console.log(config);
+};
+
+chrome.runtime.onInstalled.addListener(async function() {
+    await initializeConfig();
+
+    chrome.contextMenus.onClicked.addListener(function(info, tab) {
+        if (info.menuItemId === "test") {
+            chrome.tabs.create({url: `https://space.bilibili.com/1701735549`});
+        };
+    });
 });
