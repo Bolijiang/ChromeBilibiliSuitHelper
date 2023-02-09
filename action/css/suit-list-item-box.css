@@ -48,7 +48,7 @@
     transition: 300ms;
     border-style: none;
     background-color: rgba(240, 240, 240, 0.8);
-    border-radius: 10px;
+    border-radius: 5px;
     color: rgba(0, 0, 0, 0.8);
 }
 
@@ -80,9 +80,15 @@
     font-weight: bold;
     outline: none;
     background-color: rgba(240, 240, 240, 0.8);
-    border-radius: 10px;
-    color: rgba(0, 0, 0, 1);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.8);
     cursor: pointer;
+    transition: 300ms;
+}
+
+#suitlist-sort-option:hover {
+    background-color: rgba(240, 240, 240, 1);
+    color: rgba(0, 0, 0, 1);
 }
 
 #suit-amount {
@@ -107,7 +113,7 @@
     transition: 300ms;
     border-style: none;
     background-color: rgba(240, 240, 240, 0.8);
-    border-radius: 10px;
+    border-radius: 5px;
     color: rgba(0, 0, 0, 0.8);
 }
 

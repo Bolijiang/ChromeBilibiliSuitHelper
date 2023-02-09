@@ -46,3 +46,14 @@ async function postMySuitListSortRes(data) {
         method: "POST", type: "application/x-www-form-urlencoded", body: body,
     });
 };
+
+async function postGiveFannumToUser(data) {
+    // 赠送装扮
+    var cookies = await getCookies(null);
+    var body = `item_id=${data["item_id"]}&fan_num=${data["fan_num"]}&`;
+    body += `to_mid=${data["to_mid"]}&csrf=${cookies["bili_jct"]}`;
+    return await reqAsy({
+        url: "https://api.bilibili.com/x/garb/user/fannum/present/v2",
+        method: "POST", type: "application/x-www-form-urlencoded", body: body,
+    });
+};

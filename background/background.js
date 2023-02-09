@@ -16,6 +16,17 @@ function getLocalContent(key) {
     });
 };
 
+function contentPage(reqkey, value) {
+    // 和content.js 交互
+    return new Promise(function (resolve, _) {
+        chrome.tabs.query({currentWindow: true, active: true}, function(tabs) {
+            chrome.tabs.sendMessage(tabs[0].id, {key: reqkey, value: value}, function(res) {
+                resolve(res);
+            });
+        });
+    });
+};
+
 // -----------------------------------------------------
 
 chrome.contextMenus.create({
@@ -29,7 +40,8 @@ chrome.contextMenus.create({
 
 async function initializeConfig() {
     // 初始化设置
-    var config = await getLocalContent("config") || {"style": {}};;
+    const defaultObj = {"style": {}, "switch": {}}
+    var config = await getLocalContent("config") || defaultObj;
     if (!config["style"]["popup-background-color"]) {
         config["style"]["popup-background-color"] = "#202020";
     };
@@ -40,9 +52,11 @@ async function initializeConfig() {
 chrome.runtime.onInstalled.addListener(async function() {
     await initializeConfig();
 
-    chrome.contextMenus.onClicked.addListener(function(info, tab) {
+    chrome.contextMenus.onClicked.addListener(async function(info, tab) {
         if (info.menuItemId === "test") {
-            chrome.tabs.create({url: `https://space.bilibili.com/1701735549`});
+            var res = await contentPage("getCookies", null);
+            console.log(res);
+            // chrome.tabs.create({url: `https://space.bilibili.com/1701735549`});
         };
     });
 });

@@ -1,6 +1,17 @@
-function onClickCard() {
+async function onClickCard() {
     // 粉丝卡片点击事件
-    console.log(this);
+
+    const item_div = this.getElementsByTagName("div")[0];
+    const item = JSON.parse(item_div.dataset["item"]);
+
+    const root = document.getElementById("choose-item-box");
+    root.dataset["item"] = item_div.dataset["item"];
+    
+    var image = document.getElementById("choose-item-box-bg");
+    image.src = item["image_cover"];
+    image.opacity = chooseBackgroundOpacity;
+
+    await fanNumberOption(item);
 }
 
 function updateFanCardOnClick(handle) {
@@ -99,6 +110,7 @@ function parseItem(item) {
         "own_num": item["own_num"],
         "time_begin": parseInt(item["item"]["properties"]["sale_time_begin"]) || -1,
         "fan_share_image": item["item"]["properties"]["fan_share_image"],
+        "image_cover": item["item"]["properties"]["image_cover"],
     };
 };
 
@@ -151,17 +163,18 @@ function getCardsList(total) {
     if (exp1 && exp2 && exp3 && exp4) {
         console.log("本地存在");
         await setCardsList(load.items);
-        return
+    } else {
+        console.log("本地不存在/不正确, 开始从网络获取");
+        const items = await getCardsList(user.total)
+        await setCardsList(items);
+        console.log("更新本地 cards [uid, total, items]");
+        await setLocalContent({"cards": {
+            uid: user.uid, total: user.total, items: items,
+        }});
     };
 
-    console.log("本地不存在/不正确, 开始从网络获取");
-    const items = await getCardsList(user.total)
-
-    await setCardsList(items);
-    console.log("更新本地 cards [uid, total, items]");
-    await setLocalContent({"cards": {
-        uid: user.uid, total: user.total, items: items,
-    }});
+    const ul = document.getElementById(CardItemsListId);
+    ul.getElementsByTagName("li")[0].click();
 })();
 
 
@@ -170,9 +183,13 @@ document.getElementById("suit-reverse-button").onclick = async function() {
     const items = getCardItems();
     items.reverse();
     await setCardsList(items);
-    const load = await getLocalContent("cards") || {};
-    load["items"] = items;
-    await setLocalContent({"cards": load});
+
+    if (SuitListLocalAutoSave == true) {
+        console.log("更新本地 cards [uid, total, items]");
+        const load = await getLocalContent("cards") || {};
+        load["items"] = items;
+        await setLocalContent({"cards": load});
+    }
 };
 
 document.getElementById("update-suit-list").onclick = async function() {
@@ -184,6 +201,9 @@ document.getElementById("update-suit-list").onclick = async function() {
         alert(user.message);
         return
     };
+
+    var amount = document.getElementById(SuitAmountId);
+    amount.innerText = `共${user.total}套`;
 
     const items = await getCardsList(user.total);
     await setCardsList(items);
@@ -236,9 +256,12 @@ document.getElementById("suitlist-sort-option").onchange = async function() {
         return parseInt(a[value]) - parseInt(b[value]);
     });
 
-    const load = await getLocalContent("cards") || {};
-    load["items"] = items;
-    await setLocalContent({"cards": load});
+    if (SuitListLocalAutoSave == true) {
+        console.log("更新本地 cards [uid, total, items]");
+        const load = await getLocalContent("cards") || {};
+        load["items"] = items;
+        await setLocalContent({"cards": load});
+    }
 
     await setCardsList(items);
 };

@@ -6,23 +6,24 @@
     <link rel="stylesheet" href="css/line.css">
     <link rel="stylesheet" href="css/suit-fan-card.css">
     <link rel="stylesheet" href="css/suit-list-item-box.css">
+    <link rel="stylesheet" href="css/choose-item-box.css">
+    <link rel="stylesheet" href="css/options-box.css">
+    <link rel="stylesheet" href="css/content-box.css">
+    <link rel="stylesheet" href="css/fan-number-list-box.css">
     <script src="js/utils.js"></script>
-    <script src="js/constValue.js"></script>
     <script src="js/chrome.js"></script>
+    <script src="js/constValue.js"></script>
 </head>
 <body id="popup-body">
     <!-- 装扮列表 [内容+信息+按钮] -->
     <div class="box suit-list-item-box">
-        <!-- 信息 -->
         <div class="suit-list-text">
             <a id="suit-amount">共???套</a>
             <button id="suit-reverse-button">反向</button>
         </div>
-        <!-- 内容 -->
         <div class="suit-list-box">
             <ul id="suit-list"></ul>
         </div>
-        <!-- 按钮 -->
         <div class="suit-list-botton-box">
             <div class="suit-list-botton">
                 <button id="update-suit-list">更新装扮列表</button>
@@ -44,9 +45,31 @@
         <span class="line"></span>
     </div>
 
-    <div class="box test">
+    <div class="box choose-item-box" id="choose-item-box">
+        <img id="choose-item-box-bg">
+        
+        <div id="content-box">
+            <!-- 库存 -->
+            <div id="fan-number-content">
+                <div class="fan-number-list-box">
+                    <div id="fan-number-item"></div>
+                </div>
+                <button id="update-fan-number-list">更新</button>
+                <button id="give-fan-number-user">赠送</button>
+                <button id="test">test</button>
+            </div>
+        </div>
 
+        <div class="options-box">
+            <input type="range" min="0" max="100" step="1" id="opacity-range">
+            <select id="main-box-option">
+                <option value="fanNumberOption">库存</option>
+                <option value="2222">组件</option>
+            </select>
+            <a href="/options/options.html">设置</a>
+        </div>
     </div>
+    <script src="js/options.js"></script>
     <script src="js/animation.js"></script>
     <script src="js/fancard.js"></script>
     <script src="js/popup.js"></script>

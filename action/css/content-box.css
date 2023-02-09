@@ -1,0 +1,4 @@
+#content-box {
+    width: 405px;
+    height: calc(100% - 30px);
+}

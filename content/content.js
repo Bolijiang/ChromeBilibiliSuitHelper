@@ -14,6 +14,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     if (message.key == "postMySuitListSortRes") {
         postMySuitListSortRes(message.value).then(sendResponse);
     };
+    if (message.key == "postGiveFannumToUser") {
+        postGiveFannumToUser(message.value).then(sendResponse);
+    }
     
     return true;
 });
