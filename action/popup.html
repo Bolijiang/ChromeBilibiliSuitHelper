@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="css/popup.css">
-    <link rel="stylesheet" href="css/line.css">
-    <link rel="stylesheet" href="css/suit-fan-card.css">
-    <link rel="stylesheet" href="css/suit-list-item-box.css">
-    <link rel="stylesheet" href="css/choose-item-box.css">
     <link rel="stylesheet" href="css/options-box.css">
-    <link rel="stylesheet" href="css/content-box.css">
-    <link rel="stylesheet" href="css/fan-number-list-box.css">
+    <link rel="stylesheet" href="css/fan-card-items.css">
+    <link rel="stylesheet" href="css/fan-number-items.css">
+
     <script src="js/utils.js"></script>
     <script src="js/chrome.js"></script>
     <script src="js/constValue.js"></script>
@@ -30,8 +27,9 @@
                 <button id="apply-suit-list">应用</button>
             </div>
             <div class="suit-list-select">
-                <select id="suitlist-sort-option">
+                <select id="suit-list-sort-option">
                     <option value="">排序方式</option>
+                    <option value="date">获取时间</option>
                     <option value="number">粉丝编号</option>
                     <option value="own_num">库存数量</option>
                     <option value="time_begin">开售时间</option>
@@ -47,17 +45,19 @@
 
     <div class="box choose-item-box" id="choose-item-box">
         <img id="choose-item-box-bg">
-        
+
         <div id="content-box">
             <!-- 库存 -->
-            <div id="fan-number-content">
+            <div class="content-item" id="fan-number-content">
                 <div class="fan-number-list-box">
                     <div id="fan-number-item"></div>
                 </div>
-                <button id="update-fan-number-list">更新</button>
                 <button id="give-fan-number-user">赠送</button>
-                <button id="test">test</button>
+                <button id="show-fan-number">展示</button>
+                <button id="update-fan-number-list">更新</button>
             </div>
+
+            <div class="content-item" id=""></div>
         </div>
 
         <div class="options-box">
@@ -69,6 +69,7 @@
             <a href="/options/options.html">设置</a>
         </div>
     </div>
+    <script src="js/content.js"></script>
     <script src="js/options.js"></script>
     <script src="js/animation.js"></script>
     <script src="js/fancard.js"></script>

@@ -1,17 +1,18 @@
 async function onClickCard() {
     // 粉丝卡片点击事件
-
-    const item_div = this.getElementsByTagName("div")[0];
-    const item = JSON.parse(item_div.dataset["item"]);
-
-    const root = document.getElementById("choose-item-box");
-    root.dataset["item"] = item_div.dataset["item"];
+    await onClickFanCardHandle(this);
     
-    var image = document.getElementById("choose-item-box-bg");
-    image.src = item["image_cover"];
-    image.opacity = chooseBackgroundOpacity;
+    // const item_div = this.getElementsByTagName("div")[0];
+    // const item = JSON.parse(item_div.dataset["item"]);
 
-    await fanNumberOption(item);
+    // const root = document.getElementById("choose-item-box");
+    // root.dataset["item"] = item_div.dataset["item"];
+    
+    // var image = document.getElementById("choose-item-box-bg");
+    // image.src = item["image_cover"];
+    // image.opacity = chooseBackgroundOpacity;
+
+    // await fanNumberOption(item);
 }
 
 function updateFanCardOnClick(handle) {
@@ -30,8 +31,7 @@ function getCardItems() {
 
     var content = new Array();
     for (let i = 0; i < items.length; i++) {
-        const div = items[i].getElementsByTagName("div")[0];
-        content[i] = JSON.parse(div.dataset["item"]);
+        content[i] = getFanCardItemJson(items[i]);
     };
     return content;
 };
@@ -77,6 +77,10 @@ function createCard(item) {
     li.draggable = "true";
 
     var div = document.createElement("div");
+
+    div.dataset["cover"] = item["image_cover"];
+    delete item["cover"];
+
     div.dataset["item"] = JSON.stringify(item);
 
     div.append(createCardText("fan_card_name", item["name"]));
@@ -165,7 +169,7 @@ function getCardsList(total) {
         await setCardsList(load.items);
     } else {
         console.log("本地不存在/不正确, 开始从网络获取");
-        const items = await getCardsList(user.total)
+        const items = await getCardsList(user.total);
         await setCardsList(items);
         console.log("更新本地 cards [uid, total, items]");
         await setLocalContent({"cards": {
@@ -243,7 +247,7 @@ document.getElementById("apply-suit-list").onclick = async function() {
     return
 };
 
-document.getElementById("suitlist-sort-option").onchange = async function() {
+document.getElementById("suit-list-sort-option").onchange = async function() {
     // 排序方式
     const index = this.options.selectedIndex;
 	const value = this.options[index].value;

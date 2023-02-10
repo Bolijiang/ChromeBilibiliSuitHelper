@@ -19,7 +19,6 @@ function reqAsy(data) {
     });
 };
 
-
 async function getMySuitListRes(data) {
     // 获取自己拥有的装扮 type->json
     const url = "https://api.bilibili.com/x/garb/user/suit/asset/list";

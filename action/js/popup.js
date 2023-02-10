@@ -4,4 +4,3 @@
     
     document.body.style.backgroundColor = style["popup-background-color"];
 })();
-

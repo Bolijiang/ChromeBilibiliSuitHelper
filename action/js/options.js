@@ -33,10 +33,10 @@ function setFanNumberList(number_list) {
 
                 this.className = "fan-number-item-choose";
             };;
-
             tag.dataset["item"] = JSON.stringify(item);
+
         } else {
-            tag.className = "fan-number-item-no"
+            tag.className = "fan-number-item-no";
         };
 
         tag.innerText = padNumber(item["number"], 6);
@@ -84,7 +84,9 @@ document.getElementById("give-fan-number-user").onclick = async function() {
     var res = await contentPage("postGiveFannumToUser", {
         "fan_num": item["number"], "item_id": item_id, "to_mid": to_mid,
     });
-    if (res["message"] == 0) {
+    console.log(res);
+
+    if (res["code"] == 0) {
         alert("赠送成功");
     } else {
         alert(res["message"]);
