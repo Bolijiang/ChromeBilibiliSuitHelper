@@ -1,6 +1,6 @@
 async function onClickCard() {
     // 粉丝卡片点击事件
-    await onClickFanCardHandle(this);
+    // await onClickFanCardHandle(this);
     
     // const item_div = this.getElementsByTagName("div")[0];
     // const item = JSON.parse(item_div.dataset["item"]);
@@ -39,8 +39,6 @@ function getCardItems() {
 async function getMySuitTotal() {
     // 获取用户装扮数量
     const cookies = await contentPage("getCookies", {});
-    console.log(cookies);
-
     if (!cookies["DedeUserID"]) {
         return {code: -1, message: "未登陆"}
     };
@@ -78,10 +76,6 @@ function createCard(item) {
     li.id = `suit-item-id-${item["item_id"]}`;
 
     var div = document.createElement("div");
-
-    div.dataset["cover"] = item["image_cover"];
-    delete item["image_cover"];
-
     div.dataset["item"] = JSON.stringify(item);
 
     div.append(createCardText("fan_card_name", item["name"]));
@@ -102,7 +96,9 @@ async function setCardsList(items) {
     for (let i = 0; i < items.length; i++) {
         ul.append(createCard(items[i]));
     };
-    updateFanCardOnClick(onClickCard);
+    updateFanCardOnClick(async function() {
+        await onClickFanCardHandle(this);
+    });
 };
 
 function parseItem(item) {
@@ -145,145 +141,4 @@ function getCardsList(total) {
             resolve(items);
         });
     });
-};
-
-(async function() {
-    // 初始化粉丝卡片列表
-    const load = await getLocalContent("cards") || {};
-    load.items = load.items || new Array();
-    const user = await getMySuitTotal();
-    if (user.code == -1) {
-        alert(user.message);
-        return
-    };
-
-    var amount = document.getElementById(SuitAmountId);
-    amount.innerText = `共${user.total}套`;
-
-    const exp1 = (user.uid == load.uid);
-    const exp2 = (user.total == load.total);
-    const exp3 = (Boolean(load.items));
-    const exp4 = (user.total == load.items.length);
-
-    if (exp1 && exp2 && exp3 && exp4) {
-        console.log("本地存在");
-        await setCardsList(load.items);
-    } else {
-        console.log("本地不存在/不正确, 开始从网络获取");
-        const items = await getCardsList(user.total);
-        await setCardsList(items);
-        console.log("更新本地 cards [uid, total, items]");
-        await setLocalContent({"cards": {
-            uid: user.uid, total: user.total, items: items,
-        }});
-    };
-
-    const ul = document.getElementById(CardItemsListId);
-    ul.getElementsByTagName("li")[0].click();
-})();
-
-
-document.getElementById("suit-reverse-button").onclick = async function() {
-    // 列表反向
-    const items = getCardItems();
-    items.reverse();
-    await setCardsList(items);
-
-    if (SuitListLocalAutoSave == true) {
-        console.log("更新本地 cards [uid, total, items]");
-        const load = await getLocalContent("cards") || {};
-        load["items"] = items;
-        await setLocalContent({"cards": load});
-    }
-};
-
-document.getElementById("update-suit-list").onclick = async function() {
-    // 更新装扮列表
-    console.log("手动更新, 开始从网络获取");
-
-    const user = await getMySuitTotal();
-    if (user.code == -1) {
-        alert(user.message);
-        return
-    };
-
-    var amount = document.getElementById(SuitAmountId);
-    amount.innerText = `共${user.total}套`;
-
-    const items = await getCardsList(user.total);
-    await setCardsList(items);
-    console.log("更新本地 cards [uid, total, items]");
-    await setLocalContent({"cards": {
-        uid: user.uid, total: user.total, items: items,
-    }});
-};
-
-document.getElementById("apply-suit-list").onclick = async function() {
-    // 应用排序
-    const items = getCardItems();
-
-    const load = await getLocalContent("cards") || {};
-    load["items"] = items;
-    await setLocalContent({"cards": load});
-
-    var ids = new Array();
-    for (let i = 0; i < items.length; i++) {
-        ids[i] = items[i]["item_id"].toString();
-    };
-
-    for (let i = 0; i < sortTryNumber; i++) {
-        const res = await contentPage("postMySuitListSortRes", {ids: ids});
-        if (res["code"] == -101) {
-            alert(res["message"]);
-            return
-        };
-        if (res["code"] == 0) {
-            alert("操作成功");
-            return
-        };
-        console.log(i, res["message"]);
-    };
-
-    alert(`try [${tryNumber}] failed`);
-    return
-};
-
-document.getElementById("suit-list-sort-option").onchange = async function() {
-    // 排序方式
-    const index = this.options.selectedIndex;
-	const value = this.options[index].value;
-    if (!value) {
-        return
-    };
-
-    const items = getCardItems();
-    items.sort(function (a, b) {
-        return parseInt(a[value]) - parseInt(b[value]);
-    });
-
-    if (SuitListLocalAutoSave == true) {
-        console.log("更新本地 cards [uid, total, items]");
-        const load = await getLocalContent("cards") || {};
-        load["items"] = items;
-        await setLocalContent({"cards": load});
-    }
-
-    await setCardsList(items);
-};
-
-document.getElementById("suit-search-button").onclick = async function() {
-    // suit-item-id-xxxxxx
-    const ul = document.getElementById(CardItemsListId);
-    const lis = ul.getElementsByTagName("li");
-
-    var name2 = prompt("输入关键词");
-
-    for (let i = 0; i < lis.length; i++) {
-        const item = getFanCardItemJson(lis[i]);
-        if (item["name"].indexOf(name2) != -1) {
-            window.location.hash = `#suit-item-id-${item["item_id"]}`;
-            return
-        };
-    };
-    alert("无此装扮");
 };

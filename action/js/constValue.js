@@ -63,6 +63,12 @@ const OptionsBox_ClassName = "options-box";
 
 const MainBoxOption_Id = "main-box-option";
 
+const OpacityRange_Id = "opacity-range";
+
+const SuitSearchButton_Id = "suit-search-button";
+
+const ShowFanNumber_Id = "show-fan-number";
+
 // ----------------------------------
 
 const FanNumberItemNo_ClassName = "fan-number-item-no";
@@ -82,7 +88,10 @@ const reqPsNumber = 20;
 const sortTryNumber = 5;
 
 // 背景透明度
-const chooseBackgroundOpacity = 0.8;
+const chooseBackgroundOpacity = 0.5;
 
 // 本地自动保存
 const SuitListLocalAutoSave = true;
+
+// 更换号码后更新粉丝卡片列表
+const updateAutoFanCard = true;

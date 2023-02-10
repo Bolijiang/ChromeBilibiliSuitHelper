@@ -54,9 +54,9 @@ chrome.runtime.onInstalled.addListener(async function() {
 
     chrome.contextMenus.onClicked.addListener(async function(info, tab) {
         if (info.menuItemId === "test") {
-            var res = await contentPage("getCookies", null);
-            console.log(res);
-            // chrome.tabs.create({url: `https://space.bilibili.com/1701735549`});
+            // var res = await contentPage("getCookies", null);
+            // console.log(res);
+            chrome.tabs.create({url: `https://space.bilibili.com/1701735549`});
         };
     });
 });

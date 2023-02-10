@@ -58,37 +58,3 @@ function _animate(prevRect, target) {
         }, ms);
     };
 };
-
-(function() {
-    var root = document.getElementById(CardItemsListId);
-    var draging = null;
-
-	root.ondragstart = function(event) {
-        if (event.target.className == CardImageClassName) {
-            draging = event.target.parentNode.parentNode;
-        };
-	};
-
-    root.ondragover = function(event) {
-		event.preventDefault()
-        if (event.target.className == CardImageClassName) {
-            var target = event.target.parentNode.parentNode;
-            if (target.nodeName === "LI" && target !== draging) {
-                var targetRect = target.getBoundingClientRect();
-			    var dragingRect = draging.getBoundingClientRect();
-                if (target) {
-                    if (target.animated) {
-                        return;
-                    };
-                };
-                if (getIndex(draging) < getIndex(target)) {
-                    target.parentNode.insertBefore(draging, target.nextSibling)
-                } else {
-                    target.parentNode.insertBefore(draging, target)
-                };
-                _animate(dragingRect, draging);
-			    _animate(targetRect, target);
-            };
-        };
-	};
-})();

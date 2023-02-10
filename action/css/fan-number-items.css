@@ -22,24 +22,6 @@
     overflow: hidden;
 }
 
-/* 编号盒子 */
-
-#fan-number-item a {
-    display: block;
-    font-family: "fansCard";
-    user-select: none;
-    font-weight: bold;
-    float: left;
-    font-size: 16px;
-    border-radius: 8px;
-    line-height: 30px;
-    margin: 5px 8px;
-    width: 84px;
-    height: 30px;
-    text-align: center;
-    transition: 300ms;
-}
-
 /* 按钮 */
 
 #fan-number-content button {
@@ -65,27 +47,51 @@
     color: rgba(0, 0, 0, 1);
 }
 
-/* 盒子状态 */
+/* 编号盒子 */
 
-/* 正在展示 */
+#fan-number-item a {
+    display: block;
+    font-family: "fansCard";
+    user-select: none;
+    font-weight: bold;
+    float: left;
+    font-size: 16px;
+    border-radius: 8px;
+    line-height: 28px;
+    margin: 5px 8px;
+    width: 80px;
+    height: 26px;
+    text-align: center;
+    transition: 300ms;
+}
+
+/* 盒子状态: 正在展示 */
 .fan-number-item-show {
-    background-color: steelblue;
-}
-
-/* 不可交易 */
-.fan-number-item-no {
-    background-color: wheat;
+    border: 2px solid transparent;
     cursor: default;
+    background-color: rgba(111, 111, 111, 1);
+    color: rgba(255, 255, 255, 0.6);
 }
 
-/* 可交易 */
+/* 盒子状态: 不可交易 */
+.fan-number-item-no {
+    background-color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 0.4);
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+/* 盒子状态: 可交易 */
 .fan-number-item-yes {
-    background-color: blue;
+    background-color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 1);
+    border: 2px solid transparent;
     cursor: pointer;
 }
 
-/* 选中 */
+/* 盒子状态: 选中 */
 .fan-number-item-choose {
-    background-color: brown;
+    border: 2px solid #000000;
     cursor: pointer;
+    color: #000000;
 }

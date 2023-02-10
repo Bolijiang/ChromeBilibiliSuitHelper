@@ -16,7 +16,10 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     };
     if (message.key == "postGiveFannumToUser") {
         postGiveFannumToUser(message.value).then(sendResponse);
-    }
+    };
+    if (message.key == "postShowFanNumberRes") {
+        postShowFanNumberRes(message.value).then(sendResponse);
+    };
     
     return true;
 });

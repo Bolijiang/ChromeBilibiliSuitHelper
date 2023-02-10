@@ -56,3 +56,14 @@ async function postGiveFannumToUser(data) {
         method: "POST", type: "application/x-www-form-urlencoded", body: body,
     });
 };
+
+async function postShowFanNumberRes(data) {
+    // 展示粉丝编号到卡面
+    var cookies = await getCookies(null);
+    const csrf = cookies["bili_jct"];
+    return await reqAsy({
+        url: "https://api.bilibili.com/x/garb/user/fannum/change",
+        method: "POST", type: "application/x-www-form-urlencoded", 
+        body: `item_id=${data["item_id"]}&num=${data["num"]}&csrf=${csrf}`,
+    });
+};
