@@ -75,11 +75,12 @@ function createCard(item) {
     // 创建粉丝卡片
     var li = document.createElement("li");
     li.draggable = "true";
+    li.id = `suit-item-id-${item["item_id"]}`;
 
     var div = document.createElement("div");
 
     div.dataset["cover"] = item["image_cover"];
-    delete item["cover"];
+    delete item["image_cover"];
 
     div.dataset["item"] = JSON.stringify(item);
 
@@ -268,4 +269,21 @@ document.getElementById("suit-list-sort-option").onchange = async function() {
     }
 
     await setCardsList(items);
+};
+
+document.getElementById("suit-search-button").onclick = async function() {
+    // suit-item-id-xxxxxx
+    const ul = document.getElementById(CardItemsListId);
+    const lis = ul.getElementsByTagName("li");
+
+    var name2 = prompt("输入关键词");
+
+    for (let i = 0; i < lis.length; i++) {
+        const item = getFanCardItemJson(lis[i]);
+        if (item["name"].indexOf(name2) != -1) {
+            window.location.hash = `#suit-item-id-${item["item_id"]}`;
+            return
+        };
+    };
+    alert("无此装扮");
 };

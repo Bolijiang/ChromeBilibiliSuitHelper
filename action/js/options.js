@@ -44,17 +44,6 @@ function setFanNumberList(number_list) {
     };
 };
 
-async function fanNumberOption(item) {
-    // 库存
-    var res = await contentPage("getMyFannumListRes", {item_id: item["item_id"]});
-    console.log(res);
-    if (res["code"] == 0) {
-        setFanNumberList(res["data"]["list"] || new Array());
-    } else {
-        alert(res["message"]);
-    };
-};
-
 document.getElementById("main-box-option").onchange = async function() {
     // 选择显示内容
     const index = this.options.selectedIndex;

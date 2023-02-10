@@ -26,7 +26,15 @@
     ],
     "options_page": "options/options.html",
     "action": {
-        "default_popup": "action/popup.html"
+        "default_popup": "action/popup.html",
+        "default_title": "玉玉了",
+        "default_icon": "icons/popup.png"
     },
-    "homepage_url": "https://github.com/lllk140/ChromeBilibiliSuitHelper"
+    "homepage_url": "https://github.com/lllk140/ChromeBilibiliSuitHelper",
+    "icons": {
+        "16": "icons/16x16.png",
+        "32": "icons/32x32.png",
+        "48": "icons/48x48.png",
+        "128": "icons/128x128.png"
+    }
 }

@@ -129,7 +129,22 @@
     color: rgba(0, 0, 0, 0.8);
 }
 
-#suit-reverse-button:hover {
+#suit-search-button {
+    position: absolute;
+    right: 45px;
+    top: 2px;
+    height: 16px;
+    line-height: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 300ms;
+    border-style: none;
+    background-color: rgba(240, 240, 240, 0.8);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+#suit-search-button:hover, #suit-reverse-button:hover {
     background-color: rgba(240, 240, 240, 1);
     color: rgba(0, 0, 0, 1);
 }
