@@ -2,6 +2,7 @@
 <html lang="zh-cn">
 <head>
     <meta charset="UTF-8">
+    <script src="/assets/lib/uitls.js"></script>
     <script src="/assets/lib/chrome.js"></script>
     <link rel="stylesheet" href="css/suit.css">
     <link rel="stylesheet" href="css/fan-cards.css">
@@ -10,9 +11,9 @@
     <!-- 装扮列表 -->
     <div class="box fan-cards-item-box">
         <div class="fan-cards-title">
-            <a id="fan-cards-count">共???套</a>
+            <button id="back"><img src="/assets/icons/back.png"></button>
             <input type="text" id="fan-cards-search" placeholder="搜索装扮">
-            <a id="fan-cards-sort" href="sort.html">排序</a>
+            <button id="fan-cards-sort">排序</button>
         </div>
         <div class="fan-cards-list-box">
             <ul id="fan-cards-list"></ul>
@@ -38,6 +39,7 @@
                 <div class="fan-number-button">
                     <button>展示编号</button>
                     <button>赠送编号</button>
+                    <button>交易记录</button>
                     <button>更新库存</button>
                 </div>
             </div>

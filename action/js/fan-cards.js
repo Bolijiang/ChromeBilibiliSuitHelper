@@ -6,6 +6,7 @@ const FanCardsListSaveLoacl = true;
 const FanCardsCount_Id = "fan-cards-count";
 const FanCardsList_Id = "fan-cards-list";
 const FanCardsSearch_Id = "fan-cards-search";
+const FanCardsSort_Id = "fan-cards-sort";
 
 async function GetFanCardsTotal() {
     // 获取用户装扮数量

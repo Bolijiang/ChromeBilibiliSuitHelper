@@ -92,3 +92,24 @@ async function SetContent2Page(item_id) {
         lis[0].click();
     };
 })();
+
+
+document.getElementById("back").onclick = async function() {
+    const froms = getQueryString("from") || "popup.html";
+    const froms_list = froms.split(",");
+
+    const go_url = froms_list[froms_list.length-1];
+    const from_url = froms_list.slice(0,-1).join(",");
+
+    console.log(`${go_url}?from=${from_url}`);
+    location.replace(`${go_url}?from=${from_url}`);
+};
+
+document.getElementById(FanCardsSort_Id).onclick = async function() {
+    const path_list = window.location.pathname.split("/");
+    const from_url = getQueryString("from") || "popup.html";
+    const index_url = path_list[path_list.length-1];
+    const go_url = "sort.html";
+
+    location.replace(`${go_url}?from=${from_url},${index_url}`);
+};

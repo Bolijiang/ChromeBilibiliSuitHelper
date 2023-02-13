@@ -29,6 +29,9 @@
 	};
 })();
 
+(async function() {
+    await StartLoadFanCards(null, false);
+})();
 
 async function TopAnimate() {
     const fanCardsList = document.getElementById(FanCardsList_Id);
@@ -41,88 +44,98 @@ async function TopAnimate() {
     _animate(targetRect, target);
 };
 
+document.getElementById("back").onclick = async function() {
+    const froms = getQueryString("from") || "popup.html";
+    const froms_list = froms.split(",");
 
-document.getElementById("sort-option").onchange = async function() {
-    const index = this.options.selectedIndex;
-	const value = this.options[index].value;
-    if (!value) {
-        return
-    };
+    const go_url = froms_list[froms_list.length-1];
+    const from_url = froms_list.slice(0,-1).join(",");
 
-    const fanCardsList = document.getElementById(FanCardsList_Id);
-    const fanCards = fanCardsList.getElementsByTagName("li");
-    var cards = new Array();
-    for (let i = 0; i < fanCards.length; i++) {
-        cards[i] = fanCards[i]
-    };
-    if (value == "reverse") {
-        cards.reverse();
-    } else {
-        cards.sort(function (a, b) {
-            const aItme = parseFanCard(a);
-            const bItme = parseFanCard(b);
-            return parseInt(aItme[value]) - parseInt(bItme[value]);
-        });
-    };
-    for (let i = 0; i < fanCards.length; i++) {
-        const draging = cards[i];
-        const target = fanCards[i];
-        var targetRect = target.getBoundingClientRect();
-        var dragingRect = draging.getBoundingClientRect();
-        if (getIndex(draging) < getIndex(target)) {
-            target.parentNode.insertBefore(draging, target.nextSibling);
-        } else {
-            target.parentNode.insertBefore(draging, target);
-        };
-        _animate(dragingRect, draging);
-        _animate(targetRect, target);
-    };
+    console.log(`${go_url}?from=${from_url}`);
+    location.replace(`${go_url}?from=${from_url}`);
 };
 
+// document.getElementById("sort-option").onchange = async function() {
+//     const index = this.options.selectedIndex;
+// 	const value = this.options[index].value;
+//     if (!value) {
+//         return
+//     };
 
-document.getElementById("fan-cards-sort").onclick = async function() {
-    const root = document.getElementById(FanCardsList_Id);
-    const fanCardsList = root.childNodes;
+//     const fanCardsList = document.getElementById(FanCardsList_Id);
+//     const fanCards = fanCardsList.getElementsByTagName("li");
+//     var cards = new Array();
+//     for (let i = 0; i < fanCards.length; i++) {
+//         cards[i] = fanCards[i]
+//     };
+//     if (value == "reverse") {
+//         cards.reverse();
+//     } else {
+//         cards.sort(function (a, b) {
+//             const aItme = parseFanCard(a);
+//             const bItme = parseFanCard(b);
+//             return parseInt(aItme[value]) - parseInt(bItme[value]);
+//         });
+//     };
+//     for (let i = 0; i < fanCards.length; i++) {
+//         const draging = cards[i];
+//         const target = fanCards[i];
+//         var targetRect = target.getBoundingClientRect();
+//         var dragingRect = draging.getBoundingClientRect();
+//         if (getIndex(draging) < getIndex(target)) {
+//             target.parentNode.insertBefore(draging, target.nextSibling);
+//         } else {
+//             target.parentNode.insertBefore(draging, target);
+//         };
+//         _animate(dragingRect, draging);
+//         _animate(targetRect, target);
+//     };
+// };
 
-    var ids = new Array();
-    for (let i = 0; i < fanCardsList.length; i++) {
-        const item = parseFanCard(fanCardsList[i]);
-        ids[i] = item["item_id"];
-    };
 
-    const res = await contentPage("ApplyMyFanCardsSort", {ids: ids});
-    if (res["code"] != 0) {
-        alert(res["message"]);
-        return
-    } else {
-        alert("应用排序成功");
-    };
+// document.getElementById("fan-cards-sort").onclick = async function() {
+//     const root = document.getElementById(FanCardsList_Id);
+//     const fanCardsList = root.childNodes;
 
-    if (res["code"] == 0 && FanCardsListSaveLoacl) {
-        console.log("保存数据到本地");
-        await SaveItems2Local(null, null);
-    };
-};
+//     var ids = new Array();
+//     for (let i = 0; i < fanCardsList.length; i++) {
+//         const item = parseFanCard(fanCardsList[i]);
+//         ids[i] = item["item_id"];
+//     };
 
-document.getElementById("update-fan-cards").onclick = async function() {
-    const user = await GetFanCardsTotal();
+//     const res = await contentPage("ApplyMyFanCardsSort", {ids: ids});
+//     if (res["code"] != 0) {
+//         alert(res["message"]);
+//         return
+//     } else {
+//         alert("应用排序成功");
+//     };
 
-    if (user.code != 0) {
-        console.log(user["message"]);
-        return 
-    };
+//     if (res["code"] == 0 && FanCardsListSaveLoacl) {
+//         console.log("保存数据到本地");
+//         await SaveItems2Local(null, null);
+//     };
+// };
 
-    console.log("手动更新, 从网络更新到页面");
-    const items = await GetFanCardsList(user.total);
-    SetFardCards2Page(items);
-    UpdateFanCardOnDbClick(TopAnimate);
+// document.getElementById("update-fan-cards").onclick = async function() {
+//     const user = await GetFanCardsTotal();
 
-    if (FanCardsListSaveLoacl) {
-        console.log("保存数据到本地");
-        await SaveItems2Local(null, null);
-    };
-};
+//     if (user.code != 0) {
+//         console.log(user["message"]);
+//         return 
+//     };
 
-(async function() {
-    await StartLoadFanCards(TopAnimate, true);
-})();
+//     console.log("手动更新, 从网络更新到页面");
+//     const items = await GetFanCardsList(user.total);
+//     SetFardCards2Page(items);
+//     UpdateFanCardOnDbClick(TopAnimate);
+
+//     if (FanCardsListSaveLoacl) {
+//         console.log("保存数据到本地");
+//         await SaveItems2Local(null, null);
+//     };
+// };
+
+// (async function() {
+//     await StartLoadFanCards(TopAnimate, true);
+// })();

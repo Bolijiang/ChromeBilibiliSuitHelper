@@ -1,3 +1,26 @@
+/* 装扮列表 */
+
+.fan-cards-item-box {
+    height: 100%;
+    width: 255px;
+}
+
+.fan-cards-list-box {
+    width: 100%;
+    height: calc(100% - 25px);
+    overflow: auto;
+}
+
+.fan-cards-list-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.fan-cards-list-box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
 /* 卡片 */
 
 .fan-cards-list-box ul {
@@ -92,3 +115,83 @@
     text-align: center;
     font-size: 12px;
 }
+
+
+/* 装扮列表 */
+
+.fan-cards-item-box {
+    height: 100%;
+    width: 255px;
+}
+
+.fan-cards-title {
+    height: 25px;
+    width: 100%;
+    text-align: center;
+}
+
+.fan-cards-list-box {
+    width: 100%;
+    height: calc(100% - 25px);
+    overflow: auto;
+}
+
+.fan-cards-list-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.fan-cards-list-box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+/* 装扮列表[头] */
+
+.fan-cards-title {
+    height: 25px;
+    width: 100%;
+}
+
+#back img {
+    user-select: none;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    top: 0;
+    left: 0;
+}
+
+#back, 
+#fan-cards-search, 
+#fan-cards-sort {
+    background: transparent;
+    float: left;
+    border-style: none;
+    outline: none;
+    user-select: none;
+    font-size: 14px;
+}
+
+#back {
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+}
+
+#fan-cards-search {
+    height: 23px;
+    width: 180px;
+    color: rgba(255, 255, 255, 1);
+}
+
+#fan-cards-sort {
+    height: 25px;
+    width: 46px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+}
+
+/* 附加 */
+
