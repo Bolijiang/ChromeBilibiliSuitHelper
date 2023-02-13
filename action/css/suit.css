@@ -1,0 +1,271 @@
+/* main */
+
+@font-face {
+    font-family: "fansCard";
+    src:url("/assets/fonts/fansCard.ttf");
+}
+
+body {
+    margin: 5px;
+    height: 590px;
+    width: 675px;
+    background-color: #202020;
+}
+
+.box {
+    position: relative;
+    float: left;
+}
+
+.line-box {
+    width: 14px;
+    height: 100%;
+}
+
+.line-box .line {
+    position: relative;
+    display: block;
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 3px;
+    height: 100%;
+    left: 6px;
+    border-radius: 5px;
+}
+
+/* 装扮列表 */
+
+.fan-cards-item-box {
+    height: 100%;
+    width: 255px;
+}
+
+.fan-cards-title {
+    height: 25px;
+    width: 100%;
+    text-align: center;
+}
+
+.fan-cards-list-box {
+    width: 100%;
+    height: calc(100% - 25px);
+    overflow: auto;
+}
+
+.fan-cards-list-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.fan-cards-list-box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+/* 装扮列表[头] */
+
+#fan-cards-count, #fan-cards-sort {
+    position: absolute;
+    user-select: none;
+    height: 20px;
+    text-decoration: none;
+    line-height: 20px;
+    font-weight: bold;
+}
+
+#fan-cards-count {
+    left: 5px;
+    color: white;
+}
+
+#fan-cards-sort {
+    font-family: "Microsoft Yahei";
+    right: 5px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: 300ms;
+}
+
+#fan-cards-sort:hover {
+    color: white;
+}
+
+#fan-cards-search {
+    background-color: transparent;
+    width: 120px;
+    height: 16px;
+    border-style: none;
+    outline: none;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+}
+
+/* 内容 */
+
+.content-item-box {
+    width: 405px;
+    height: 100%;
+}
+
+#content-item-box-bg {
+    position: absolute;
+    z-index: -1;
+    height: calc(100% - 30px);
+    width: 405px;
+    background-size: cover;
+    user-select: none;
+    opacity: 0.8;
+}
+
+#content-box {
+    height: calc(100% - 30px);
+    border-bottom: solid rgba(255, 255, 255, 0.8) 3px;
+    overflow: auto;
+}
+
+#content-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+#content-box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+#content-box div {
+    position: relative;
+}
+
+.conetnt-tilte {
+    margin-top: 5px;
+    height: 20px;
+}
+
+.conetnt-tilte span {
+    display: block;
+    color: rgba(255, 255, 255, 0.7);
+    position: absolute;
+}
+
+.conetnt-tilte .title {
+    color: rgba(255, 255, 255, 0.9);
+    left: 5px;
+    user-select: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.conetnt-tilte .line {
+    right: 5px;
+    width: calc(100% - 45px);
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.7);
+    height: 3px;
+    top: 10px;
+}
+
+/* 编号库存 */
+
+.fan-number-box {
+    height: 200px;
+    width: 400px;
+}
+
+.fan-number-list-box {
+    width: 305px;
+    height: 200px;
+    overflow: auto;
+    float: left;
+}
+
+.fan-number-list-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.fan-number-list-box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+#fan-number-list {
+    overflow: hidden;
+    width: 300px;
+}
+
+#fan-number-list a {
+    position: relative;
+    top: 5px;
+    left: 6px;
+    display: block;
+    font-family: "fansCard";
+    user-select: none;
+    font-weight: bold;
+    float: left;
+    font-size: 16px;
+    border-radius: 8px;
+    line-height: 30px;
+    margin: 5px 8px;
+    width: 80px;
+    height: 30px;
+    text-align: center;
+    transition: 300ms;
+}
+
+.fan-number-button {
+    width: 95px;
+    height: 100%;
+    float: left;
+    text-align: center;
+}
+
+.fan-number-button button {
+    width: 80px;
+    height: 30px;
+    margin: 5px auto;
+    cursor: pointer;
+    transition: 300ms;
+    border-style: none;
+    background-color: rgba(240, 240, 240, 0.5);
+    color: rgba(0, 0, 0, 0.8);
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.fan-number-button button:hover {
+    background-color: rgba(240, 240, 240, 1);
+    color: rgba(0, 0, 0, 1);
+}
+
+/* 盒子状态: 正在展示 */
+.fan-number-state-show {
+    border: 2px solid transparent;
+    cursor: default;
+    background-color: rgba(111, 111, 111, 1);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* 盒子状态: 不可交易 */
+.fan-number-state-no {
+    background-color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 0.4);
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+/* 盒子状态: 可交易 */
+.fan-number-state-yes {
+    background-color: rgba(255, 255, 255, 1);
+    color: rgba(0, 0, 0, 1);
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+
+/* 盒子状态: 选中 */
+.fan-number-state-choose {
+    border: 2px solid #000000;
+    cursor: pointer;
+    color: #000000;
+}

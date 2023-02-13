@@ -1,0 +1,139 @@
+/* main */
+
+@font-face {
+    font-family: "fansCard";
+    src:url("/assets/fonts/fansCard.ttf");
+}
+
+body {
+    margin: 5px;
+    height: 570px;
+    width: 255px;
+    background-color: #202020;
+}
+
+.box {
+    position: relative;
+    float: left;
+}
+
+
+.fan-cards-item-box {
+    height: 100%;
+    width: 255px;
+}
+
+.fan-cards-list-box {
+    width: 100%;
+    height: calc(100% - 60px);
+    overflow: auto;
+}
+
+.fan-cards-list-box::-webkit-scrollbar {
+    width: 5px;
+}
+
+.fan-cards-list-box::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+#back {
+    display: block;
+    width: 20px;
+    height: 20px;
+    float: left;
+}
+
+#back span {
+    width: 10px;
+    height: 10px;
+    display: block;
+    border-bottom: 3px solid rgba(255, 255, 255, 1);
+    border-left: 3px solid rgba(255, 255, 255, 1);
+    position: absolute;
+    transform: rotate(45deg);
+    top: 8px;
+    left: 12px;
+}
+
+#fan-cards-sort {
+    position: absolute;
+    user-select: none;
+    height: 20px;
+    text-decoration: none;
+    line-height: 20px;
+    font-weight: bold;
+    font-family: "Microsoft Yahei";
+    right: 5px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: 300ms;
+    cursor: pointer;
+}
+
+#fan-cards-sort:hover {
+    color: white;
+}
+
+#fan-cards-search {
+    position: relative;
+    background-color: transparent;
+    width: 150px;
+    height: 16px;
+    border-style: none;
+    outline: none;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+}
+
+.fan-cards-title {
+    height: 25px;
+    width: 100%;
+    text-align: center;
+}
+
+#update-fan-cards {
+    float: left;
+    position: relative;
+    width: 100px;
+    height: 25px;
+    border-style: none;
+    font-weight: bold;
+    outline: none;
+    background-color: rgba(240, 240, 240, 0.8);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    transition: 300ms;
+    top: 5px;
+}
+
+#update-fan-cards:hover {
+    background-color: rgba(240, 240, 240, 1);
+    color: rgba(0, 0, 0, 1);
+}
+
+#sort-option {
+    float: right;
+    position: relative;
+    top: 5px;
+    right: 0;
+    width: 150px;
+    height: 25px;
+    border-style: none;
+    font-weight: bold;
+    outline: none;
+    background-color: rgba(240, 240, 240, 0.8);
+    border-radius: 5px;
+    color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+    transition: 300ms;
+}
+
+#sort-option:hover {
+    background-color: rgba(240, 240, 240, 1);
+    color: rgba(0, 0, 0, 1);
+}

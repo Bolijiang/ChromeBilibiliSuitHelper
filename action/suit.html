@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <script src="/assets/lib/chrome.js"></script>
+    <link rel="stylesheet" href="css/suit.css">
+    <link rel="stylesheet" href="css/fan-cards.css">
+</head>
+<body>
+    <!-- 装扮列表 -->
+    <div class="box fan-cards-item-box">
+        <div class="fan-cards-title">
+            <a id="fan-cards-count">共???套</a>
+            <input type="text" id="fan-cards-search" placeholder="搜索装扮">
+            <a id="fan-cards-sort" href="sort.html">排序</a>
+        </div>
+        <div class="fan-cards-list-box">
+            <ul id="fan-cards-list"></ul>
+        </div>
+    </div>
+
+    <div class="box line-box">
+        <span class="line"></span>
+    </div>
+
+    <div class="box content-item-box">
+        <img id="content-item-box-bg">
+
+        <div id="content-box">
+            <div class="conetnt-tilte">
+                <span class="title">库存</span>
+                <span class="line"></span>
+            </div>
+            <div class="fan-number-box">
+                <div class="fan-number-list-box">
+                    <div id="fan-number-list"></div>
+                </div>
+                <div class="fan-number-button">
+                    <button>展示编号</button>
+                    <button>赠送编号</button>
+                    <button>更新库存</button>
+                </div>
+            </div>
+
+            <div class="conetnt-tilte">
+                <span class="title">组件</span>
+                <span class="line"></span>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+    </div>
+
+    <script src="js/fan-cards.js"></script>
+    <script src="js/suit.js"></script>
+</body>
+</html>

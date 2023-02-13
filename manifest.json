@@ -1,8 +1,9 @@
 {
-    "name": "玉玉了",
+    "name": "1701735549-2",
     "description": "Web端装扮工具",
     "version": "0.0.1",
     "manifest_version": 3,
+    "options_page": "options/options.html",
     "permissions": [
         "tabs", 
         "downloads",
@@ -10,31 +11,29 @@
         "contextMenus"
     ],
     "background": {
-        "service_worker": "background/background.js"
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "action": {
+        "default_popup": "action/popup.html",
+        "default_title": "玉玉了",
+        "default_icon": "assets/icons/popup.png"
     },
     "content_scripts": [
         {
             "js": [
-                "content/utils.js",
-                "content/request.js", 
-                "content/content.js"
+                "content.js"
             ],
             "matches": [
                 "*://*.bilibili.com/*"
             ]
         }
     ],
-    "options_page": "options/options.html",
-    "action": {
-        "default_popup": "action/popup.html",
-        "default_title": "玉玉了",
-        "default_icon": "icons/popup.png"
-    },
-    "homepage_url": "https://github.com/lllk140/ChromeBilibiliSuitHelper",
     "icons": {
-        "16": "icons/16x16.png",
-        "32": "icons/32x32.png",
-        "48": "icons/48x48.png",
-        "128": "icons/128x128.png"
-    }
+        "16": "assets/icons/16x16.png",
+        "32": "assets/icons/32x32.png",
+        "48": "assets/icons/48x48.png",
+        "128": "assets/icons/128x128.png"
+    },
+    "homepage_url": "https://github.com/lllk140/ChromeBilibiliSuitHelper"
 }
