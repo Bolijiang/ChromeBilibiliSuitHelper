@@ -3,29 +3,28 @@
     const root = document.getElementById(FanCardsList_Id);
     let drag = null;
 	root.ondragstart = function(event) {
-        if (event.target.nodeName !== "IMG") {
-            return null;
+        const drag2 = event.target.parentNode.parentNode;
+        if (drag2.nodeName === "LI") {
+            drag = drag2;
         }
-        drag = event.target.parentNode.parentNode;
     };
     root.ondragover = function(event) {
 		event.preventDefault();
-        if (event.target.nodeName !== "IMG") {
-            return null;
-        }
         let target = event.target.parentNode.parentNode;
         if (target === drag || target.animated) {
             return null;
         }
-        let targetRect = target.getBoundingClientRect();
-        let dragRect = drag.getBoundingClientRect();
-        if (getIndex(drag) < getIndex(target)) {
-            target.parentNode.insertBefore(drag, target.nextSibling);
-        } else {
-            target.parentNode.insertBefore(drag, target);
+        if (target.nodeName === "LI") {
+            let targetRect = target.getBoundingClientRect();
+            let dragRect = drag.getBoundingClientRect();
+            if (getIndex(drag) < getIndex(target)) {
+                target.parentNode.insertBefore(drag, target.nextSibling);
+            } else {
+                target.parentNode.insertBefore(drag, target);
+            }
+            _animate(dragRect, drag);
+            _animate(targetRect, target);
         }
-        _animate(dragRect, drag);
-        _animate(targetRect, target);
 	};
 })();
 
@@ -33,6 +32,19 @@
     updateBackButton("back", false);
     await BuildFanCards(null, false);
     updateTopButton();
+
+    const options = document.getElementById("options-list");
+    const buttons = options.getElementsByTagName("button");
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].onclick = function() {
+            const items = GetFanCardsItems();
+            const key = buttons[i].dataset["key"];
+            items.sort(function (a, b) {
+                return parseInt(a[key]) - parseInt(b[key]);
+            });
+            SetFanCards2Page(items);
+        }
+    }
 })();
 
 function updateTopButton() {
@@ -83,7 +95,32 @@ function updateTopButton() {
     }
 }
 
+document.getElementById("reverse-button").onclick = function() {
+    const items = GetFanCardsItems();
+    items.reverse();
+    SetFanCards2Page(items);
+}
 
+document.getElementById("refresh-button").onclick = async function() {
+    console.log("手动更新")
+    const user = await GetFanCardsTotal();
+    if (user.code !== 0) {
+        console.log(user["message"]);
+        return null;
+    }
+    const items = await GetFanCardsList(user.total);
+    SetFanCards2Page(items);
+    updateTopButton();
+
+    if (FanCardsListSaveLocal) {
+        console.log("保存数据到本地");
+        await SaveItems2Local(user.uid, user.total);
+    }
+    const fanCardTags = GetFanCardsTag();
+    if (fanCardTags.length !== 0) {
+        fanCardTags[0].click();
+    }
+}
 
 // document.getElementById("sort-option").onchange = async function() {
 //     const index = this.options.selectedIndex;

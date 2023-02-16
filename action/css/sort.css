@@ -8,7 +8,7 @@
 body {
     margin: 5px;
     height: 590px;
-    width: 315px;
+    width: 290px;
     background-color: #202020;
 }
 
@@ -34,23 +34,8 @@ body {
 
 /* ------------------------------------- */
 
-/*.top-fan-card, .bottom-fan-card {*/
-/*    position: absolute;*/
-/*    display: block;*/
-/*    cursor: pointer;*/
-/*    width: 20px;*/
-/*    height: 20px;*/
-/*    background-color: aqua;*/
-/*}*/
-
-/*.top-fan-card img, .bottom-fan-card img {*/
-
-/*}*/
-
-
 .top-bottom-button {
     position: absolute;
-    background-color: aqua;
     right: 0;
     width: 40px;
     height: 20px;
@@ -74,4 +59,102 @@ body {
     position: relative;
     top: 0;
     right: 5px;
+}
+
+.content-box {
+    width: 20px;
+    height: 100%;
+}
+
+#refresh-button {
+    background: transparent;
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-style: none;
+    outline: none;
+    user-select: none;
+}
+
+#refresh-button img {
+    position: absolute;
+    user-focus: none;
+    width: 20px;
+    height: 20px;
+    top: 0;
+    left: 0;
+}
+
+/* ------------------------- */
+
+#options-ico {
+    position: absolute;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    transition: 300ms;
+}
+
+#options-list {
+    right: 0;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    transition: 300ms;
+    background: transparent;
+    opacity: 1;
+    overflow: hidden;
+    text-align: center;
+}
+
+#options-list button {
+    position: relative;
+    width: 80px;
+    height: 30px;
+    top: 20px;
+    margin: 2px auto;
+    cursor: pointer;
+    border-style: none;
+    outline: none;
+    user-select: none;
+    border-radius: 5px;
+    transition: 300ms;
+}
+
+#options-list:hover {
+    width: 100px;
+    height: 160px;
+    background: #202020;
+    border: 1px solid rgb(255, 255, 255);
+}
+
+#options-list:hover .sort-button {
+    top: 10px;
+}
+
+#options-list:hover #options-ico {
+    opacity: 0;
+}
+
+#reverse-button {
+    background: transparent;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-style: none;
+    outline: none;
+    user-select: none;
+    top: 30px;
+}
+
+#reverse-button img {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    user-select: none;
+    top: 0;
+    left: 0;
 }

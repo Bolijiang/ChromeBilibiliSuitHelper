@@ -12,7 +12,9 @@
 <body>
     <div class="box fan-cards-item-box">
         <div class="fan-cards-title">
-            <button id="back"><img src="/assets/icons/back.png"></button>
+            <button id="back">
+                <img src="/assets/icons/back.png">
+            </button>
             <input type="text" id="fan-cards-search" placeholder="搜索装扮">
             <button id="fan-cards-sort">完成</button>
         </div>
@@ -23,6 +25,22 @@
     </div>
     <div class="box line-box">
         <span class="line"></span>
+    </div>
+
+    <div class="box content-box">
+        <img src="/assets/icons/options.png" id="options-ico">
+        <button id="reverse-button">
+            <img src="/assets/icons/reverse.png">
+        </button>
+        <div id="options-list" title="排序方式">
+            <button data-key="time_begin" class="sort-button">开售时间</button>
+            <button data-key="date_number" class="sort-button">获取时间</button>
+            <button data-key="own_num" class="sort-button">库存数量</button>
+            <button data-key="number" class="sort-button">粉丝编号</button>
+        </div>
+        <button id="refresh-button">
+            <img src="/assets/icons/refresh.png">
+        </button>
     </div>
     <script src="js/fan-cards.js"></script>
     <script src="js/sort.js"></script>

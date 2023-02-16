@@ -18,7 +18,7 @@ const FanCard_ClassName = "fan-card";
 
 function ParseFanCardTag(li) {
     // 解析粉丝卡片内容[li标签]
-    const root = li.childNodes[0];
+    const root = li.getElementsByClassName("fan-card-content")[0];
     const item = JSON.parse(root.dataset["item"]);
     item["image_cover"] = root.dataset["cover"];
 

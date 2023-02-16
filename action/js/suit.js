@@ -82,3 +82,4 @@ document.getElementById("update-fan-cards").onclick = async function() {
         fanCardTags[0].click();
     }
 }
+
