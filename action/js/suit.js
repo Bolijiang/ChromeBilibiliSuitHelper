@@ -15,8 +15,8 @@ function UpdateBackgroundImage(image_url) {
     // 更新背景
     const img = document.getElementById(ContentItemBoxBg_Id);
     img.src = image_url;
-    img.style.opacity = BackgroundImageOpacity;
-};
+    img.style.opacity = BackgroundImageOpacity.toString();
+}
 
 
 function updaterChooseFanNumber() {
@@ -25,59 +25,62 @@ function updaterChooseFanNumber() {
         this.classList.remove(FanNumberStataChoose_ClassName);
     } else {
         this.classList.add(FanNumberStataChoose_ClassName);
-    };
-};
+    }
+}
 
 
 function SetFanNumberList(number_list, item_id) {
     function padNumber(num, len) {
         return (Array(len).join("0") + `${num}`).slice(-len);
-    };
+    }
     const root = document.getElementById(FanNumberList_Id);
     root.innerHTML = "";
     for (let i = 0; i < number_list.length; i++) {
         const item = number_list[i];
-        var tag = document.createElement("a");
+        const tag = document.createElement("a");
         tag.innerText = padNumber(item["number"], 6);
 
-        if (item["state"] == "equip") {
+        if (item["state"] === "equip") {
             tag.className = FanNumberStataShow_ClassName;
             root.append(tag);
             continue;
-        };
+        }
 
-        if (item["mid"] == item["buy_mid"]) {
+        if (item["mid"] === item["buy_mid"]) {
             tag.className = FanNumberStataYes_ClassName;
         } else {
             tag.className = FanNumberStataNo_ClassName;
-        };
+        }
 
         tag.dataset["item"] = JSON.stringify({
             "item_id": item_id, "fan_num": item["number"]
         });
         tag.onclick = updaterChooseFanNumber;
         root.append(tag);
-    };
-};
+    }
+}
 
 async function SetContent2Page(item_id) {
     // 设置内容到页面
+
     return Promise.all([
         contentPage("GetMyFanNumInventory", {item_id: item_id}),
     ]).then(function(values) {
         const GetMyFanNumInventoryRes = values[0];
-        if (GetMyFanNumInventoryRes["code"] != 0) {
+        if (GetMyFanNumInventoryRes["code"] !== 0) {
             alert(GetMyFanNumInventoryRes["message"]);
             return
-        };
-        const fan_number_list = GetMyFanNumInventoryRes["data"]["list"] || new Array();
+        }
+        const fan_number_list = GetMyFanNumInventoryRes["data"]["list"] || [];
         SetFanNumberList(fan_number_list, item_id);
     });
-};
+}
 
 (async function() {
-    await StartLoadFanCards(async function() {
-        const item = parseFanCard(this);
+    updateBackButton("back", false);
+
+    await BuildFanCards(async function() {
+        const item = ParseFanCardTag(this);
         await SetContent2Page(item["item_id"]);
 
         UpdateBackgroundImage(item["image_cover"]);
@@ -87,23 +90,12 @@ async function SetContent2Page(item_id) {
         root.dataset["item_id"] = item["item_id"];
     });
 
-    var lis = document.getElementById(FanCardsList_Id).childNodes;
-    if (lis.length != 0) {
-        lis[0].click();
-    };
+    const fanCardTags = GetFanCardsTag();
+    if (fanCardTags.length !== 0) {
+        fanCardTags[0].click();
+    }
 })();
 
-
-document.getElementById("back").onclick = async function() {
-    const froms = getQueryString("from") || "popup.html";
-    const froms_list = froms.split(",");
-
-    const go_url = froms_list[froms_list.length-1];
-    const from_url = froms_list.slice(0,-1).join(",");
-
-    console.log(`${go_url}?from=${from_url}`);
-    location.replace(`${go_url}?from=${from_url}`);
-};
 
 document.getElementById(FanCardsSort_Id).onclick = async function() {
     const path_list = window.location.pathname.split("/");

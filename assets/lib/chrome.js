@@ -9,7 +9,7 @@ function contentPage(reqkey, value) {
             });
         });
     });
-};
+}
 
 function setLocalContent(content) {
     // 保存数据到本地
@@ -18,13 +18,13 @@ function setLocalContent(content) {
             resolve(content);
         });
     });
-};
+}
 
-function getLocalContent(key) {
+function getLocalContent(key, exp={}) {
     // 获取本地数据
     return new Promise(function (resolve, _) {
         chrome.storage.local.get([key], function(value) {
-            resolve(value[key]);
+            resolve(value[key] || exp);
         });
     });
-};
+}

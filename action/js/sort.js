@@ -1,59 +1,55 @@
 (function() {
     // 排序动画
-    var root = document.getElementById(FanCardsList_Id);
-    var draging = null;
+    const root = document.getElementById(FanCardsList_Id);
+    let drag = null;
 	root.ondragstart = function(event) {
-        if (event.target.nodeName != "IMG") { 
+        if (event.target.nodeName !== "IMG") {
             return null;
-        };
-        draging = event.target.parentNode.parentNode;
+        }
+        drag = event.target.parentNode.parentNode;
     };
     root.ondragover = function(event) {
-		event.preventDefault()
-        if (event.target.nodeName != "IMG") {
+		event.preventDefault();
+        if (event.target.nodeName !== "IMG") {
             return null;
-        };
-        var target = event.target.parentNode.parentNode;
-        if (target == draging || target.animated) {
+        }
+        let target = event.target.parentNode.parentNode;
+        if (target === drag || target.animated) {
             return null;
-        };
-        var targetRect = target.getBoundingClientRect();
-        var dragingRect = draging.getBoundingClientRect();
-        if (getIndex(draging) < getIndex(target)) {
-            target.parentNode.insertBefore(draging, target.nextSibling);
+        }
+        let targetRect = target.getBoundingClientRect();
+        let dragRect = drag.getBoundingClientRect();
+        if (getIndex(drag) < getIndex(target)) {
+            target.parentNode.insertBefore(drag, target.nextSibling);
         } else {
-            target.parentNode.insertBefore(draging, target);
-        };
-        _animate(dragingRect, draging);
+            target.parentNode.insertBefore(drag, target);
+        }
+        _animate(dragRect, drag);
         _animate(targetRect, target);
 	};
 })();
 
 (async function() {
-    await StartLoadFanCards(null, false);
+    updateBackButton("back", false);
+    await BuildFanCards(null, false);
 })();
 
-async function TopAnimate() {
-    const fanCardsList = document.getElementById(FanCardsList_Id);
-    const draging = this;
-    const target = fanCardsList.childNodes[0];
-    const targetRect = target.getBoundingClientRect();
-    const dragingRect = draging.getBoundingClientRect();
-    target.parentNode.insertBefore(draging, target);
-    _animate(dragingRect, draging);
-    _animate(targetRect, target);
-};
-
-document.getElementById("back").onclick = async function() {
-    const froms = getQueryString("from") || "popup.html";
-    const froms_list = froms.split(",");
-
-    const go_url = froms_list[froms_list.length-1];
-    const from_url = froms_list.slice(0,-1).join(",");
-
-    console.log(`${go_url}?from=${from_url}`);
-    location.replace(`${go_url}?from=${from_url}`);
-};
+function updateTopButton() {
+    let cards = Array.from(document.getElementsByClassName("card"));
+    for (let i = 0; i < cards.length; i++) {
+        cards[i].onclick = function() {
+            const fanCardsList = document.getElementById(FanCardsList_Id);
+            const drag = this;
+            const target = fanCardsList.childNodes[0];
+            const targetRect = target.getBoundingClientRect();
+            const dragRect = drag.getBoundingClientRect();
+            target.parentNode.insertBefore(drag, target);
+            _animate(dragRect, drag);
+            _animate(targetRect, target);
+        };
+    }
+    console.log(cards)
+}
 
 // document.getElementById("sort-option").onchange = async function() {
 //     const index = this.options.selectedIndex;
