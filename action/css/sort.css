@@ -31,3 +31,47 @@ body {
     left: 6px;
     border-radius: 5px;
 }
+
+/* ------------------------------------- */
+
+/*.top-fan-card, .bottom-fan-card {*/
+/*    position: absolute;*/
+/*    display: block;*/
+/*    cursor: pointer;*/
+/*    width: 20px;*/
+/*    height: 20px;*/
+/*    background-color: aqua;*/
+/*}*/
+
+/*.top-fan-card img, .bottom-fan-card img {*/
+
+/*}*/
+
+
+.top-bottom-button {
+    position: absolute;
+    background-color: aqua;
+    right: 0;
+    width: 40px;
+    height: 20px;
+    overflow: clip;
+}
+
+.top-bottom-button button {
+    float: left;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    border-style: none;
+    outline: none;
+    user-select: none;
+    background-color: #202020;
+}
+
+.top-bottom-button button img {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    top: 0;
+    right: 5px;
+}

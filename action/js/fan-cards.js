@@ -124,6 +124,7 @@ function CreateFanCard(item) {
     card.id = item["item_id"];
 
     const content = document.createElement("div");
+    content.className = "fan-card-content";
 
     const fanCardNumber = padNumber(item["number"], 6);
     const fanCardOwnNum = padNumber(item["own_num"], 3);

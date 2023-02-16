@@ -39,7 +39,7 @@
     cursor: pointer;
 }
 
-.fan-cards-list-box ul li div img {
+.fan-card-content img {
     width: 250px;
     height: 100px;
     background-size: cover;
@@ -48,7 +48,7 @@
     border-radius: 10px;
 }
 
-.fan-cards-list-box ul li div span {
+.fan-card-content span {
     display: block;
     position: absolute;
 }

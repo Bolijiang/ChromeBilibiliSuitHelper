@@ -32,24 +32,58 @@
 (async function() {
     updateBackButton("back", false);
     await BuildFanCards(null, false);
+    updateTopButton();
 })();
 
 function updateTopButton() {
-    let cards = Array.from(document.getElementsByClassName("card"));
-    for (let i = 0; i < cards.length; i++) {
-        cards[i].onclick = function() {
-            const fanCardsList = document.getElementById(FanCardsList_Id);
-            const drag = this;
-            const target = fanCardsList.childNodes[0];
-            const targetRect = target.getBoundingClientRect();
-            const dragRect = drag.getBoundingClientRect();
-            target.parentNode.insertBefore(drag, target);
-            _animate(dragRect, drag);
-            _animate(targetRect, target);
-        };
+    function createButton(topFunc, bottomFunc) {
+        const div = document.createElement("div");
+        div.className = "top-bottom-button";
+        const topButton = document.createElement("button");
+        const bottomButton = document.createElement("button");
+        topButton.onclick = topFunc;
+        bottomButton.onclick = bottomFunc;
+        topButton.className = "top-fan-card";
+        bottomButton.className = "bottom-fan-card";
+        const topImg = document.createElement("img");
+        const bottomImg = document.createElement("img");
+        topImg.src = "/assets/icons/top.png";
+        bottomImg.src = "/assets/icons/bottom.png";
+        topButton.append(topImg);
+        bottomButton.append(bottomImg);
+        div.append(topButton);
+        div.append(bottomButton);
+        return div
     }
-    console.log(cards)
+    function TopFunc(eve) {
+        const drag = eve.target.parentNode.parentNode.parentNode;
+        const fanCardsList = document.getElementById(FanCardsList_Id);
+        const target = fanCardsList.childNodes[0];
+        const targetRect = target.getBoundingClientRect();
+        const dragRect = drag.getBoundingClientRect();
+        target.parentNode.insertBefore(drag, target);
+        _animate(dragRect, drag);
+        _animate(targetRect, target);
+    }
+    function BottomFunc(eve) {
+        const drag = eve.target.parentNode.parentNode.parentNode;
+        const fanCardsList = document.getElementById(FanCardsList_Id);
+        const target = fanCardsList.childNodes[fanCardsList.childNodes.length-1];
+        const targetRect = target.getBoundingClientRect();
+        const dragRect = drag.getBoundingClientRect();
+        target.parentNode.insertBefore(drag, target);
+        _animate(dragRect, drag);
+        _animate(targetRect, target);
+    }
+
+    let cards = GetFanCardsTag();
+    for (let i = 0; i < cards.length; i++) {
+        const button = createButton(TopFunc, BottomFunc);
+        cards[i].insertBefore(button, cards[i].firstChild);
+    }
 }
+
+
 
 // document.getElementById("sort-option").onchange = async function() {
 //     const index = this.options.selectedIndex;
