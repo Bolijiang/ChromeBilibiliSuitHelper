@@ -10,85 +10,32 @@ const FanNumberStataNo_ClassName = "fan-number-state-no";
 const FanNumberStataYes_ClassName = "fan-number-state-yes";
 const FanNumberStataChoose_ClassName = "fan-number-state-choose";
 
+const UpdateBgOpacity_Id = "update-bg-opacity";
 
 function UpdateBackgroundImage(image_url) {
     // 更新背景
     const img = document.getElementById(ContentItemBoxBg_Id);
     img.src = image_url;
     img.style.opacity = BackgroundImageOpacity.toString();
+    const bgOpacity = document.getElementById(UpdateBgOpacity_Id);
+    bgOpacity.value = BackgroundImageOpacity * 100
 }
 
+async function FanCardClickHandle() {
+    const item = ParseFanCardTag(this);
+    await SetContent2Page(item["item_id"]);
 
-function updaterChooseFanNumber() {
-    // 更新选中编号
-    if (this.classList.contains(FanNumberStataChoose_ClassName)) {
-        this.classList.remove(FanNumberStataChoose_ClassName);
-    } else {
-        this.classList.add(FanNumberStataChoose_ClassName);
-    }
-}
-
-
-function SetFanNumberList(number_list, item_id) {
-    function padNumber(num, len) {
-        return (Array(len).join("0") + `${num}`).slice(-len);
-    }
-    const root = document.getElementById(FanNumberList_Id);
-    root.innerHTML = "";
-    for (let i = 0; i < number_list.length; i++) {
-        const item = number_list[i];
-        const tag = document.createElement("a");
-        tag.innerText = padNumber(item["number"], 6);
-
-        if (item["state"] === "equip") {
-            tag.className = FanNumberStataShow_ClassName;
-            root.append(tag);
-            continue;
-        }
-
-        if (item["mid"] === item["buy_mid"]) {
-            tag.className = FanNumberStataYes_ClassName;
-        } else {
-            tag.className = FanNumberStataNo_ClassName;
-        }
-
-        tag.dataset["item"] = JSON.stringify({
-            "item_id": item_id, "fan_num": item["number"]
-        });
-        tag.onclick = updaterChooseFanNumber;
-        root.append(tag);
-    }
-}
-
-async function SetContent2Page(item_id) {
-    // 设置内容到页面
-
-    return Promise.all([
-        contentPage("GetMyFanNumInventory", {item_id: item_id}),
-    ]).then(function(values) {
-        const GetMyFanNumInventoryRes = values[0];
-        if (GetMyFanNumInventoryRes["code"] !== 0) {
-            alert(GetMyFanNumInventoryRes["message"]);
-            return
-        }
-        const fan_number_list = GetMyFanNumInventoryRes["data"]["list"] || [];
-        SetFanNumberList(fan_number_list, item_id);
-    });
+    UpdateBackgroundImage(item["image_cover"]);
+    delete item["fan_share_image"];
+    delete item["image_cover"];
+    const root = document.getElementById(ContentBox_Id);
+    root.dataset["item_id"] = item["item_id"];
 }
 
 (async function() {
     updateBackButton("back", false);
 
-    await BuildFanCards(async function() {
-        const item = ParseFanCardTag(this);
-        await SetContent2Page(item["item_id"]);
-
-        UpdateBackgroundImage(item["image_cover"]);
-        delete item["fan_share_image"];
-        delete item["image_cover"];
-        const root = document.getElementById(ContentBox_Id);
-        root.dataset["item_id"] = item["item_id"];
-    });
+    await BuildFanCards(FanCardClickHandle, false);
 
     const fanCardTags = GetFanCardsTag();
     if (fanCardTags.length !== 0) {
@@ -102,6 +49,36 @@ document.getElementById(FanCardsSort_Id).onclick = async function() {
     const from_url = getQueryString("from") || "popup.html";
     const index_url = path_list[path_list.length-1];
     const go_url = "sort.html";
-
     location.replace(`${go_url}?from=${from_url},${index_url}`);
 };
+
+document.getElementById(UpdateBgOpacity_Id).onchange = async function() {
+    const img = document.getElementById(ContentItemBoxBg_Id);
+    img.style.opacity = (parseInt(this.value) / 100).toString();
+    this.style.opacity = ((parseInt(this.value) / 100) || 0.2).toString();
+}
+
+document.getElementById("update-fan-cards").onclick = async function() {
+    console.log("手动更新")
+    const user = await GetFanCardsTotal();
+    if (user.code !== 0) {
+        console.log(user["message"]);
+        return null;
+    }
+    const items = await GetFanCardsList(user.total);
+    SetFanCards2Page(items);
+
+    const tags = GetFanCardsTag();
+    for (let i = 0; i < tags.length; i++) {
+        tags[i]["onclick"] = FanCardClickHandle;
+    }
+
+    if (FanCardsListSaveLocal) {
+        console.log("保存数据到本地");
+        await SaveItems2Local(user.uid, user.total);
+    }
+    const fanCardTags = GetFanCardsTag();
+    if (fanCardTags.length !== 0) {
+        fanCardTags[0].click();
+    }
+}

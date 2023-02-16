@@ -29,7 +29,7 @@
         <img id="content-item-box-bg">
 
         <div id="content-box">
-            <div class="conetnt-tilte">
+            <div class="content-title">
                 <span class="title">库存</span>
                 <span class="line"></span>
             </div>
@@ -45,18 +45,22 @@
                 </div>
             </div>
 
-            <div class="conetnt-tilte">
+            <div class="content-title">
                 <span class="title">组件</span>
                 <span class="line"></span>
             </div>
         </div>
-    </div>
 
-    <div>
-
+        <div class="function-box">
+            <input type="range" min="0" max="100" step="1" id="update-bg-opacity"/>
+            <button id="update-fan-cards">
+                <img src="/assets/icons/refresh.png">
+            </button>
+        </div>
     </div>
 
     <script src="js/fan-cards.js"></script>
+    <script src="js/fan-number.js"></script>
     <script src="js/suit.js"></script>
 </body>
 </html>

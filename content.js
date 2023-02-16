@@ -6,22 +6,22 @@ function request(method, url, params={}, data=null, json=null, type_list=[]) {
         let url = u + "?";
         for(let key in pas) {
             url += `${key}=${pas[key]}&`;
-        };
-        return url;
-    };
+        }
+        return url.slice(0, url.length-1);
+    }
     function buildDataBody(_data) {
         let body_data = "";
         for(let key in _data || {}) {
             const _key = encodeURI(key);
             const _value = encodeURI(_data[key]);
             body_data += `${_key}=${_value}&`
-        };
+        }
         return body_data.slice(0, body_data.length-1);
-    };
+    }
 
     if (data && json) {
         throw new Error("all(data, json) != false");
-    };
+    }
 
     type_list.push(data ? defaultDataType : defaultJsonType);
 
@@ -31,67 +31,67 @@ function request(method, url, params={}, data=null, json=null, type_list=[]) {
         xhr.setRequestHeader("Content-Type", type_list.join("; "));
         xhr.withCredentials = true;
         xhr.onload = function() {
-            if (this.status == 200) {
+            if (this.status === 200) {
                 resolve(JSON.parse(this.responseText));
             } else {
                 reject(new Error(xhr.statusText));
-            };
+            }
         };
         xhr.send(data ? buildDataBody(data): JSON.stringify(json));
     });
-};
+}
 
 const biliApi = {
     GetCookies: async function(message={type: "json"}) {
         // 获取cookies -> type[dict]
-        if (message.type != "json") {
+        if (message.type !== "json") {
             return document.cookie;
-        };
+        }
         let cookie = {};
         if (!document.cookie) {
             return cookie;
-        };
+        }
         let cookie_list = document.cookie.split("; ");
         for (let i = 0; i < cookie_list.length; i++) {
-            const element = cookie_list[i].split("=");
+            let element = cookie_list[i].split("=");
             if (element.length < 2) {
                 element = [element[0], ""];
-            };
+            }
             cookie[element[0]] = element[1];
-        };
+        }
         return cookie
     },
 
     GetMyFanCards: async function(message) {
         // 获取自己拥有的装扮 
         const url = "https://api.bilibili.com/x/garb/user/suit/asset/list";
-        var params = {
+        const params = {
             "part": "suit", "state": "active", "is_fans": "true",
             "ps": message.ps || 1, "pn": message.pn || 1,
         };
-        return await request("GET", url, params=params);
+        return await request("GET", url, params);
     },
 
     GetMyFanNumInventory: async function(message) {
         // 获取自己指定装扮的库存
         const url = "https://api.bilibili.com/x/garb/user/fannum/list";
-        var params = {"item_id": message.item_id || ""};
-        return await request("GET", url, params=params);
+        const params = {"item_id": message.item_id || ""};
+        return await request("GET", url, params);
     },
     GetSuitAssets: async function(message) {
         // 获取装扮的内容
         const url = "https://api.bilibili.com/x/garb/user/suit/asset";
-        var params = {"item_id": message.item_id, "part": "suit", "trial": "0"};
-        return await request("GET", url, params=params);
+        const params = {"item_id": message.item_id, "part": "suit", "trial": "0"};
+        return await request("GET", url, params);
     },
     GetSuitOrderList: async function(message) {
         // 获取订单
         const url = "https://api.live.bilibili.com/xlive/revenue/v1/order/getMainOrderList";
-        var params = {
+        const params = {
             "page": message.pn || "1", "status": message.type,
             "page_size": message.ps || "10", "biz_type": "1",
         };
-        return await request("GET", url, params=params);
+        return await request("GET", url, params);
     },
 
     GetMyPreviewAssets: async function(message) {
@@ -103,7 +103,7 @@ const biliApi = {
         // 获取其他人基础信息
         const url = "https://account.bilibili.com/api/member/getCardByMid";
         const params = {"mid": message.mid || ""};
-        return await request("GET", url, params=params);
+        return await request("GET", url, params);
     },
 
     GetMyInfo: async function(message) {
@@ -116,14 +116,14 @@ const biliApi = {
         return await request("GET", "https://api.bilibili.com/x/garb/user/preview/privileges");
     },
 
-    ApplyMyFanCardsSort: async function(messgae) {
+    ApplyMyFanCardsSort: async function(message) {
         // 应用装扮排序
         const url = "https://api.bilibili.com/x/garb/user/suit/asset/list/sort";
         const cookies = await biliApi.GetCookies({type: "json"});
         const formData = {
-            "ids": messgae.ids.join(","), "csrf": cookies["bili_jct"],
+            "ids": message.ids.join(","), "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, data=formData);
+        return await request("POST", url, {}, formData);
     },
 
     GiveFanNumToOthers: async function(message) {
@@ -134,7 +134,7 @@ const biliApi = {
             "item_id": message["item_id"], "fan_num": message["fan_num"],
             "to_mid": message["to_mid"], "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, data=formData);
+        return await request("POST", url, {}, formData);
     },
 
     ShowFanNumToCard: async function(message) {
@@ -145,7 +145,7 @@ const biliApi = {
             "item_id": message["item_id"], "num": message["num"], 
             "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, data=formData);
+        return await request("POST", url, {}, formData);
     },
 };
 

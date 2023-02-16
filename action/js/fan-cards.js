@@ -89,6 +89,7 @@ function GetFanCardsList(total) {
                 const array = response_array[i]["data"]["list"] || [];
                 for (let i = 0; i < array.length; i++) {
                     items[n] = parseItem(array[i]);
+                    n += 1;
                 }
             }
             resolve(items);
@@ -192,9 +193,9 @@ async function BuildFanCards(handle=null, double=false) {
         SetFanCards2Page(items);
     }
 
-    const items = GetFanCardsTag();
-    for (let i = 0; i < items.length; i++) {
-        items[i][double ? "ondblclick": "onclick"] = handle;
+    const tags = GetFanCardsTag();
+    for (let i = 0; i < tags.length; i++) {
+        tags[i][double ? "ondblclick": "onclick"] = handle;
     }
 
     if (FanCardsListSaveLocal && !expAll) {
