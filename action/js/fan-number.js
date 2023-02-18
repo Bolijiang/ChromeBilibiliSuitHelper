@@ -1,11 +1,3 @@
-function updaterChooseFanNumber() {
-    // 更新选中编号
-    if (this.classList.contains(FanNumberStataChoose_ClassName)) {
-        this.classList.remove(FanNumberStataChoose_ClassName);
-    } else {
-        this.classList.add(FanNumberStataChoose_ClassName);
-    }
-}
 
 function SetFanNumberList(number_list, item_id) {
     function padNumber(num, len) {
@@ -38,18 +30,64 @@ function SetFanNumberList(number_list, item_id) {
     }
 }
 
-async function SetContent2Page(item_id) {
-    // 设置内容到页面
+async function SetFanNumber2Page(item_id) {
+    const res = await contentPage("GetMyFanNumInventory", {item_id: item_id});
+    if (res["code"] !== 0) {
+        alert(res["message"]);
+        return null;
+    }
 
-    return Promise.all([
-        contentPage("GetMyFanNumInventory", {item_id: item_id}),
-    ]).then(function(values) {
-        const GetMyFanNumInventoryRes = values[0];
-        if (GetMyFanNumInventoryRes["code"] !== 0) {
-            alert(GetMyFanNumInventoryRes["message"]);
-            return
-        }
-        const fan_number_list = GetMyFanNumInventoryRes["data"]["list"] || [];
-        SetFanNumberList(fan_number_list, item_id);
-    });
+    // const test = [];
+    // let t = 0
+    //
+    const fanNumberList = res["data"]["list"] || [];
+    //
+    // for (let i = 0; i < fanNumberList.length; i++) {
+    //     test[t] = fanNumberList[i]
+    //     t += 1
+    // }
+    // for (let i = 0; i < fanNumberList.length; i++) {
+    //     test[t] = fanNumberList[i]
+    //     t += 1
+    // }
+
+    SetFanNumberList(fanNumberList, item_id);
+    // SetFanNumberList(test, item_id)
+}
+
+function updaterChooseFanNumber() {
+    // 更新选中编号
+    if (this.classList.contains(FanNumberStataChoose_ClassName)) {
+        this.classList.remove(FanNumberStataChoose_ClassName);
+        return null;
+    }
+
+    const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
+    for (let i = 0; i < choose.length; i++) {
+        choose[i].classList.remove(FanNumberStataChoose_ClassName);
+    }
+
+    this.classList.add(FanNumberStataChoose_ClassName);
+}
+
+document.getElementById("show-fan-number").onclick = async function() {
+    const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
+    if ((choose || []).length !== 1) {
+        console.log("未选择或选择多个")
+        return null
+    }
+    if (choose[0].classList.contains(FanNumberStataShow_ClassName)) {
+        console.log("不能选择正在展示的编号")
+        return null
+    }
+    const item = JSON.parse(choose[0].dataset["item"]);
+
+    const value = {"item_id": item["item_id"], "num": item["fan_num"]};
+    const res = await contentPage("ShowFanNumToCard", value);
+    if (res["code"] !== 0) {
+        alert(res["message"]);
+        return null;
+    }
+
+    // 这里写更新库存
 }

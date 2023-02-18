@@ -23,7 +23,10 @@ function UpdateBackgroundImage(image_url) {
 
 async function FanCardClickHandle() {
     const item = ParseFanCardTag(this);
-    await SetContent2Page(item["item_id"]);
+
+    const setFanNumber = SetFanNumber2Page(item["item_id"]);
+
+    await setFanNumber
 
     UpdateBackgroundImage(item["image_cover"]);
     delete item["fan_share_image"];
