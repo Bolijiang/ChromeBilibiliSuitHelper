@@ -92,3 +92,38 @@ document.getElementById("update-fan-number").onclick = async function() {
     const fanNumberList = res["data"]["list"] || [];
     SetFanNumberList(fanNumberList, item_id);
 }
+
+document.getElementById("fan-number-log").onclick = function() {
+    const path_list = window.location.pathname.split("/");
+    const from_url = getQueryString("from") || "popup.html";
+    const index_url = path_list[path_list.length-1];
+    const go_url = "log.html";
+    location.replace(`${go_url}?from=${from_url},${index_url}`);
+}
+
+document.getElementById("give-fan-number").onclick = async function() {
+    const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
+    if ((choose || []).length !== 1) {
+        console.log("未选择或选择多个")
+        return null
+    }
+    if (choose[0].classList.contains(FanNumberStataShow_ClassName)) {
+        console.log("不能选择正在展示的编号")
+        return null
+    }
+    if (choose[0].classList.contains(FanNumberStataNo_ClassName)) {
+        alert("不能选择已锁编号")
+        return null
+    }
+    const item = JSON.parse(choose[0].dataset["item"]);
+
+    const value = {"item_id": item["item_id"], "fan_nums": item["fan_num"]};
+    const res = await contentPage("BuildFanNumberShareUrl", value);
+    if (res["code"] !== 0) {
+        alert(res["message"])
+    }
+    const share_param = res["data"]["share_param"];
+    const url = "https://www.bilibili.com/h5/mall/share/receive"
+    const shareUrl = `${url}/${item["item_id"]}?${share_param}`;
+    alert(`交易链接:[${shareUrl}]`)
+}

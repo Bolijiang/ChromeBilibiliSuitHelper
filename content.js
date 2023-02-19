@@ -147,6 +147,17 @@ const biliApi = {
         };
         return await request("POST", url, {}, formData);
     },
+
+    BuildFanNumberShareUrl: async function(message) {
+        //  生成共享链接
+        const url = "https://api.bilibili.com/x/garb/user/fannum/present/share";
+        const cookies = await biliApi.GetCookies({type: "json"});
+        const formData = {
+            "item_id": message["item_id"], "fan_nums": message["num"],
+            "csrf": cookies["bili_jct"],
+        };
+        return await request("POST", url, {}, formData);
+    }
 };
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
