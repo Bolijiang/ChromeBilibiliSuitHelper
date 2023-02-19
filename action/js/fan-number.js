@@ -116,12 +116,16 @@ document.getElementById("give-fan-number").onclick = async function() {
     const url = "https://www.bilibili.com/h5/mall/share/receive"
     let shareUrl = `${url}/${item["item_id"]}?${share_param}`;
 
-    const res1 = contentPage("BuildShortLinkUrl", {url: shareUrl});
+    const res1 = await contentPage("BuildShortLinkUrl", {url: shareUrl});
     if (res1["code"] === 0) {
-        shareUrl = res1["data"]["content"];
-    } else {
         console.log("无法生成短链接");
+        console.log(res1["message"]);
     }
+    if (!res1["data"]["content"]) {
+        console.log("无法生成短链接");
+        console.log(res1["message"]);
+    }
+    shareUrl = res1["data"]["content"];
     navigator.clipboard.writeText(shareUrl).then(
         function() {
             alert("链接已复制到剪贴板");
@@ -133,16 +137,9 @@ document.getElementById("give-fan-number").onclick = async function() {
 }
 
 document.getElementById("fan-number-log").onclick = function() {
-    // const path_list = window.location.pathname.split("/");
-    // const from_url = getQueryString("from") || "popup.html";
-    // const index_url = path_list[path_list.length-1];
-    // const go_url = "log.html";
-    // location.replace(`${go_url}?from=${from_url},${index_url}`);
-
-    const promise = navigator.clipboard.writeText("222222222");
-    promise.then(function() {
-        console.log("1")
-    }, function() {
-        console.log("2")
-    })
+    const path_list = window.location.pathname.split("/");
+    const from_url = getQueryString("from") || "popup.html";
+    const index_url = path_list[path_list.length-1];
+    const go_url = "log.html";
+    location.replace(`${go_url}?from=${from_url},${index_url}`);
 }

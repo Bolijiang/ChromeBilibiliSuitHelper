@@ -1,35 +1,33 @@
-function request(method, url, params={}, data=null, json=null, type_list=[]) {
-    const defaultDataType = "application/x-www-form-urlencoded";
-    const defaultJsonType = "application/json";
 
-    function urlAddParams(u, pas) {
-        let url = u + "?";
-        for(let key in pas) {
-            url += `${key}=${pas[key]}&`;
+const requestUtils = {
+    urlAddParams: function(url, params) {
+        let UrlReturn = url + "?";
+        for(let key in params || {}) {
+            UrlReturn += `${key}=${params[key]}&`;
         }
-        return url.slice(0, url.length-1);
-    }
-    function buildDataBody(_data) {
+        return UrlReturn
+    },
+    buildDataBody: function(form_data) {
         let body_data = "";
-        for(let key in _data || {}) {
-            const _key = encodeURI(key);
-            const _value = encodeURI(_data[key]);
+        for(let key in form_data || {}) {
+            const _key = key;
+            const _value = form_data[key];
             body_data += `${_key}=${_value}&`
         }
         return body_data.slice(0, body_data.length-1);
     }
+}
 
-    if (data && json) {
-        throw new Error("all(data, json) != false");
-    }
+function request(method, url, params={}, body={}, setting={}, type=[]) {
+    const defaultDataType = "application/x-www-form-urlencoded";
+    const defaultJsonType = "application/json";
 
-    type_list.push(data ? defaultDataType : defaultJsonType);
-
+    type.push(body.data ? defaultDataType : defaultJsonType);
     return new Promise(function (resolve, reject) {
         let xhr = new XMLHttpRequest();
-        xhr.open(method, urlAddParams(url, params), true);
-        xhr.setRequestHeader("Content-Type", type_list.join("; "));
-        xhr.withCredentials = true;
+        xhr.open(method, requestUtils.urlAddParams(url, params), true);
+        xhr.setRequestHeader("Content-Type", type.join("; "));
+        xhr.withCredentials = setting.withCredentials === undefined;
         xhr.onload = function() {
             if (this.status === 200) {
                 resolve(JSON.parse(this.responseText));
@@ -37,8 +35,12 @@ function request(method, url, params={}, data=null, json=null, type_list=[]) {
                 reject(new Error(xhr.statusText));
             }
         };
-        xhr.send(data ? buildDataBody(data): JSON.stringify(json));
-    });
+        if (body.data) {
+            xhr.send(requestUtils.buildDataBody(body.data));
+        } else {
+            xhr.send(JSON.stringify(body.json));
+        }
+    })
 }
 
 const biliApi = {
@@ -120,10 +122,8 @@ const biliApi = {
         // 应用装扮排序
         const url = "https://api.bilibili.com/x/garb/user/suit/asset/list/sort";
         const cookies = await biliApi.GetCookies({type: "json"});
-        const formData = {
-            "ids": message.ids.join(","), "csrf": cookies["bili_jct"],
-        };
-        return await request("POST", url, {}, formData);
+        const formData = {"ids": message.ids.join(","), "csrf": cookies["bili_jct"]};
+        return await request("POST", url, {}, {data: formData});
     },
 
     GiveFanNumToOthers: async function(message) {
@@ -134,7 +134,7 @@ const biliApi = {
             "item_id": message["item_id"], "fan_num": message["fan_num"],
             "to_mid": message["to_mid"], "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, {}, formData);
+        return await request("POST", url, {}, {data: formData});
     },
 
     ShowFanNumToCard: async function(message) {
@@ -145,7 +145,7 @@ const biliApi = {
             "item_id": message["item_id"], "num": message["fan_num"],
             "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, {}, formData);
+        return await request("POST", url, {}, {data: formData});
     },
 
     BuildFanNumberShareUrl: async function(message) {
@@ -156,17 +156,19 @@ const biliApi = {
             "item_id": message["item_id"], "fan_nums": message["fan_num"],
             "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, {}, formData);
+        return await request("POST", url, {}, {data: formData});
     },
 
     BuildShortLinkUrl: async function(message) {
+        // 生成短链接
         const url = "https://api.bilibili.com/x/share/click";
+        const GoUrl = decodeURI(encodeURIComponent(message["url"]));
         const formData = {
-            "build": 6700300, "buvid": 0, "oid": message.url,
-            "platform": "android", "share_channel": "COPY",
+            "build": 6700300, "buvid": 0, "oid": GoUrl,
+            "platform": "windows", "share_channel": "COPY",
             "share_id": "public.webview.0.0.pv", "share_mode": 3,
         };
-        return await request("POST", url, {}, formData);
+        return await request("POST", url, {}, {data: formData}, {withCredentials: false});
     }
 };
 
