@@ -19,8 +19,6 @@ const requestUtils = {
 }
 
 function request(detail={}, body={}, setting={}) {
-    // detail
-    // method, url, params
     const defaultDataType = "application/x-www-form-urlencoded";
     const defaultJsonType = "application/json";
 

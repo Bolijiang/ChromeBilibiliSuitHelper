@@ -1,3 +1,7 @@
+(async function() {
+    createLinkButton("fan-number-log", "log.html", false);
+})();
+
 function SetFanNumberList(number_list, item_id) {
     function padNumber(num, len) {
         return (Array(len).join("0") + `${num}`).slice(-len);
@@ -134,12 +138,4 @@ document.getElementById("give-fan-number").onclick = async function() {
             alert(`无法复制到剪贴板\n交易链接:\n${shareUrl}`)
         }
     );
-}
-
-document.getElementById("fan-number-log").onclick = function() {
-    const path_list = window.location.pathname.split("/");
-    const from_url = getQueryString("from") || "popup.html";
-    const index_url = path_list[path_list.length-1];
-    const go_url = "log.html";
-    location.replace(`${go_url}?from=${from_url},${index_url}`);
 }

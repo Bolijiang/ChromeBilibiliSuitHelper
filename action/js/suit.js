@@ -36,7 +36,8 @@ async function FanCardClickHandle() {
 }
 
 (async function() {
-    updateBackButton("back", false);
+    createBackButton("back", false);
+    createLinkButton(FanCardsSort_Id, "sort.html", false);
 
     await BuildFanCards(FanCardClickHandle, false);
 
@@ -46,14 +47,6 @@ async function FanCardClickHandle() {
     }
 })();
 
-
-document.getElementById(FanCardsSort_Id).onclick = async function() {
-    const path_list = window.location.pathname.split("/");
-    const from_url = getQueryString("from") || "popup.html";
-    const index_url = path_list[path_list.length-1];
-    const go_url = "sort.html";
-    location.replace(`${go_url}?from=${from_url},${index_url}`);
-};
 
 document.getElementById(UpdateBgOpacity_Id).onchange = async function() {
     const img = document.getElementById(ContentItemBoxBg_Id);

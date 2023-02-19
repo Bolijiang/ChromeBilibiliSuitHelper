@@ -29,7 +29,7 @@
 })();
 
 (async function() {
-    updateBackButton("back", false);
+    createBackButton("back", false);
     await BuildFanCards(null, false);
     updateTopButton();
 
