@@ -1,6 +1,7 @@
 const FromLocalUpdateFanCards = true;
 const UpdateFanCardsRequestCount = 20; 
 const FanCardsListSaveLocal = true;
+const FanCardsUpdateAfterReset = false;
 
 const FanCardsList_Id = "fan-cards-list";
 const FanCardsSearch_Id = "fan-cards-search";

@@ -81,8 +81,16 @@ document.getElementById("update-fan-cards").onclick = async function() {
         await SaveItems2Local(user.uid, user.total);
     }
     const fanCardTags = GetFanCardsTag();
-    if (fanCardTags.length !== 0) {
+
+    if (fanCardTags.length === 0) {
+        return null
+    }
+
+    const contentTag = document.getElementById("content-box");
+    const old_item_id = contentTag.dataset["item_id"];
+    if (old_item_id && !FanCardsUpdateAfterReset) {
+        document.getElementById(old_item_id).click();
+    } else {
         fanCardTags[0].click();
     }
 }
-

@@ -37,22 +37,8 @@ async function SetFanNumber2Page(item_id) {
         return null;
     }
 
-    // const test = [];
-    // let t = 0
-    //
     const fanNumberList = res["data"]["list"] || [];
-    //
-    // for (let i = 0; i < fanNumberList.length; i++) {
-    //     test[t] = fanNumberList[i]
-    //     t += 1
-    // }
-    // for (let i = 0; i < fanNumberList.length; i++) {
-    //     test[t] = fanNumberList[i]
-    //     t += 1
-    // }
-
     SetFanNumberList(fanNumberList, item_id);
-    // SetFanNumberList(test, item_id)
 }
 
 function updaterChooseFanNumber() {
@@ -89,5 +75,20 @@ document.getElementById("show-fan-number").onclick = async function() {
         return null;
     }
 
-    // 这里写更新库存
+    await document.getElementById("update-fan-cards").click();
+}
+
+document.getElementById("update-fan-number").onclick = async function() {
+    let item_id = document.getElementById("content-box").dataset["item_id"];
+    if (!item_id) {
+        const fanCardTags = GetFanCardsTag();
+        if (fanCardTags.length === 0) {
+            return null;
+        }
+        fanCardTags[0].click();
+        item_id = document.getElementById("content-box").dataset["item_id"];
+    }
+    const res = await contentPage("GetMyFanNumInventory", {item_id: item_id});
+    const fanNumberList = res["data"]["list"] || [];
+    SetFanNumberList(fanNumberList, item_id);
 }
