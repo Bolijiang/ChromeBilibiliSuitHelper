@@ -18,16 +18,17 @@ function createBackButton(ElementId, double=false) {
     return true
 }
 
-function createLinkButton(ElementId, go_url, double=false) {
+function createLinkButton(ElementId, go_url, data={}, double=false) {
     const root = document.getElementById(ElementId);
     if (!root) {
         return false
     }
+    const content = encodeURIComponent(JSON.stringify(data));
     root[double ? "ondblclick": "onclick"] = function() {
         const path_list = window.location.pathname.split("/");
         const from_url = getQueryString("from") || "popup.html";
         const index_url = path_list[path_list.length-1];
-        location.replace(`${go_url}?from=${from_url},${index_url}`);
+        location.replace(`${go_url}?from=${from_url},${index_url}&data=${content}`);
     }
     return true
 }

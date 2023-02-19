@@ -37,7 +37,7 @@ async function FanCardClickHandle() {
 
 (async function() {
     createBackButton("back", false);
-    createLinkButton(FanCardsSort_Id, "sort.html", false);
+    createLinkButton(FanCardsSort_Id, "sort.html", {}, false);
 
     await BuildFanCards(FanCardClickHandle, false);
 
