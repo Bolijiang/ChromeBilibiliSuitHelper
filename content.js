@@ -18,14 +18,19 @@ const requestUtils = {
     }
 }
 
-function request(method, url, params={}, body={}, setting={}, type=[]) {
+function request(detail={}, body={}, setting={}) {
+    // detail
+    // method, url, params
     const defaultDataType = "application/x-www-form-urlencoded";
     const defaultJsonType = "application/json";
+
+    const type = detail.type || [];
+    const params = detail.params || {};
 
     type.push(body.data ? defaultDataType : defaultJsonType);
     return new Promise(function (resolve, reject) {
         let xhr = new XMLHttpRequest();
-        xhr.open(method, requestUtils.urlAddParams(url, params), true);
+        xhr.open(detail.method, requestUtils.urlAddParams(detail.url, params), true);
         xhr.setRequestHeader("Content-Type", type.join("; "));
         xhr.withCredentials = setting.withCredentials === undefined;
         xhr.onload = function() {
@@ -71,20 +76,26 @@ const biliApi = {
             "part": "suit", "state": "active", "is_fans": "true",
             "ps": message.ps || 1, "pn": message.pn || 1,
         };
-        return await request("GET", url, params);
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
     },
 
     GetMyFanNumInventory: async function(message) {
         // 获取自己指定装扮的库存
         const url = "https://api.bilibili.com/x/garb/user/fannum/list";
         const params = {"item_id": message.item_id || ""};
-        return await request("GET", url, params);
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
     },
     GetSuitAssets: async function(message) {
         // 获取装扮的内容
         const url = "https://api.bilibili.com/x/garb/user/suit/asset";
         const params = {"item_id": message.item_id, "part": "suit", "trial": "0"};
-        return await request("GET", url, params);
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
     },
     GetSuitOrderList: async function(message) {
         // 获取订单
@@ -93,37 +104,42 @@ const biliApi = {
             "page": message.pn || "1", "status": message.type,
             "page_size": message.ps || "10", "biz_type": "1",
         };
-        return await request("GET", url, params);
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
     },
 
-    GetMyPreviewAssets: async function(message) {
-        // 获取自己装扮类所有信息
-        return await request("GET", "https://api.bilibili.com/x/garb/user/preview/asset/list");
-    },
-
-    GetOthersInfo: async function(message) {
-        // 获取其他人基础信息
-        const url = "https://account.bilibili.com/api/member/getCardByMid";
-        const params = {"mid": message.mid || ""};
-        return await request("GET", url, params);
-    },
-
-    GetMyInfo: async function(message) {
-        // 获取自己的信息
-        return await request("GET", "https://api.bilibili.com/x/web-interface/nav");
-    },
-
-    GetPreviewPrivileges: async function(message) {
-        // 获取特权
-        return await request("GET", "https://api.bilibili.com/x/garb/user/preview/privileges");
-    },
+    // GetMyPreviewAssets: async function(message) {
+    //     // 获取自己装扮类所有信息
+    //     return await request("GET", "https://api.bilibili.com/x/garb/user/preview/asset/list");
+    // },
+    //
+    // GetOthersInfo: async function(message) {
+    //     // 获取其他人基础信息
+    //     const url = "https://account.bilibili.com/api/member/getCardByMid";
+    //     const params = {"mid": message.mid || ""};
+    //     return await request("GET", url, params);
+    // },
+    //
+    // GetMyInfo: async function(message) {
+    //     // 获取自己的信息
+    //     return await request("GET", "https://api.bilibili.com/x/web-interface/nav");
+    // },
+    //
+    // GetPreviewPrivileges: async function(message) {
+    //     // 获取特权
+    //     return await request("GET", "https://api.bilibili.com/x/garb/user/preview/privileges");
+    // },
 
     ApplyMyFanCardsSort: async function(message) {
         // 应用装扮排序
         const url = "https://api.bilibili.com/x/garb/user/suit/asset/list/sort";
         const cookies = await biliApi.GetCookies({type: "json"});
         const formData = {"ids": message.ids.join(","), "csrf": cookies["bili_jct"]};
-        return await request("POST", url, {}, {data: formData});
+        return await request(
+            {method: "POST", url: url},
+            {data: formData}
+        );
     },
 
     GiveFanNumToOthers: async function(message) {
@@ -134,7 +150,10 @@ const biliApi = {
             "item_id": message["item_id"], "fan_num": message["fan_num"],
             "to_mid": message["to_mid"], "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, {}, {data: formData});
+        return await request(
+            {method: "POST", url: url},
+            {data: formData}
+        );
     },
 
     ShowFanNumToCard: async function(message) {
@@ -145,7 +164,10 @@ const biliApi = {
             "item_id": message["item_id"], "num": message["fan_num"],
             "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, {}, {data: formData});
+        return await request(
+            {method: "POST", url: url},
+            {data: formData}
+        );
     },
 
     BuildFanNumberShareUrl: async function(message) {
@@ -156,7 +178,10 @@ const biliApi = {
             "item_id": message["item_id"], "fan_nums": message["fan_num"],
             "csrf": cookies["bili_jct"],
         };
-        return await request("POST", url, {}, {data: formData});
+        return await request(
+            {method: "POST", url: url},
+            {data: formData}
+        );
     },
 
     BuildShortLinkUrl: async function(message) {
@@ -168,7 +193,11 @@ const biliApi = {
             "platform": "windows", "share_channel": "COPY",
             "share_id": "public.webview.0.0.pv", "share_mode": 3,
         };
-        return await request("POST", url, {}, {data: formData}, {withCredentials: false});
+        return await request(
+            {method: "POST", url: url},
+            {data: formData},
+            {withCredentials: false}
+        );
     }
 };
 
