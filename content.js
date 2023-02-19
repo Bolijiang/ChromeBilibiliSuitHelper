@@ -142,7 +142,7 @@ const biliApi = {
         const url = "https://api.bilibili.com/x/garb/user/fannum/change";
         const cookies = await biliApi.GetCookies({type: "json"});
         const formData = {
-            "item_id": message["item_id"], "num": message["num"], 
+            "item_id": message["item_id"], "num": message["fan_num"],
             "csrf": cookies["bili_jct"],
         };
         return await request("POST", url, {}, formData);
@@ -153,8 +153,18 @@ const biliApi = {
         const url = "https://api.bilibili.com/x/garb/user/fannum/present/share";
         const cookies = await biliApi.GetCookies({type: "json"});
         const formData = {
-            "item_id": message["item_id"], "fan_nums": message["num"],
+            "item_id": message["item_id"], "fan_nums": message["fan_num"],
             "csrf": cookies["bili_jct"],
+        };
+        return await request("POST", url, {}, formData);
+    },
+
+    BuildShortLinkUrl: async function(message) {
+        const url = "https://api.bilibili.com/x/share/click";
+        const formData = {
+            "build": 6700300, "buvid": 0, "oid": message.url,
+            "platform": "android", "share_channel": "COPY",
+            "share_id": "public.webview.0.0.pv", "share_mode": 3,
         };
         return await request("POST", url, {}, formData);
     }
