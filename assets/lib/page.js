@@ -37,13 +37,16 @@ async function AlertMessage(detail={}, style={}) {
     const window = document.createElement("div");
     window.style.position = "absolute";
     window.style.textAlign = "center";
+    window.style.height = "auto";
     window.style.opacity = "0";
     window.innerText = detail.message;
 
+    window.style.padding = style.padding || "5px";
     window.style.fontSize = style.fontSize || "16px";
     window.style.fontWeight = style.fontWeight || "bold";
+    window.style.borderRadius = style.borderRadius || "5px";
 
-    window.style.background = style.background || "#202020";
+    window.style.background = style.background || "#606060";
     window.style.color = style.color || "#ffffff";
 
     window.style.top = style.top || "50%";
