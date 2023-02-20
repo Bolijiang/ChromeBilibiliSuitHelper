@@ -21,6 +21,7 @@ const requestUtils = {
 function request(detail={}, body={}, setting={}) {
     const defaultDataType = "application/x-www-form-urlencoded";
     const defaultJsonType = "application/json";
+    const credentials = setting.withCredentials;
 
     const type = detail.type || [];
     const params = detail.params || {};
@@ -30,7 +31,7 @@ function request(detail={}, body={}, setting={}) {
         let xhr = new XMLHttpRequest();
         xhr.open(detail.method, requestUtils.urlAddParams(detail.url, params), true);
         xhr.setRequestHeader("Content-Type", type.join("; "));
-        xhr.withCredentials = setting.withCredentials === undefined;
+        xhr.withCredentials = (credentials === undefined || credentials === true);
         xhr.onload = function() {
             if (this.status === 200) {
                 resolve(JSON.parse(this.responseText));

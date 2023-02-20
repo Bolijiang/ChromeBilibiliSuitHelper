@@ -1,3 +1,76 @@
+function CountCenterTopAndLeft(window) {
+    let marginLeft = getComputedStyle(document.body).marginLeft;
+    marginLeft = parseInt(marginLeft.slice(0, marginLeft.length - 2));
+    const windowLeft = document.body.clientWidth - window.clientWidth;
+    let marginTop = getComputedStyle(document.body).marginTop;
+    marginTop = parseInt(marginTop.slice(0, marginTop.length - 2));
+    const windowTop = document.body.clientHeight - window.clientHeight;
+    return {left: windowLeft / 2 + marginLeft, top: windowTop / 2 + marginTop}
+}
+
+async function showWindow(window, detail, obj) {
+    const show_time = detail["ShowTime"] || 300;
+    const show_step = detail["ShowStep"] || 50;
+
+    const opacity_step = 1 / show_step;
+    const timeout = show_time / show_step;
+
+    const spanStep = detail["spanStep"] || 10;
+    const span = document.body.clientHeight / spanStep;
+    let StartTop = obj.top + span + (detail["offset"] || 0);
+
+    window.style.top = StartTop.toString() + "px";
+    window.style.left = obj.left.toString() + "px";
+
+    let opacity = 0;
+    let timer = null;
+    function change() {
+        opacity += opacity_step;
+        StartTop -= span / show_step;
+        window.style.opacity = opacity.toString();
+        window.style.top = StartTop.toString() +"px";
+        if (opacity >= 1) {
+            clearTimeout(timer);
+            return false;
+        }
+        timer = setTimeout(function() {
+            change();
+        }, timeout)
+    }
+    return change();
+}
+
+async function hideWindow(window, detail, obj) {
+    const hide_time = detail["HideTime"] || 300;
+    const hide_step = detail["HideStep"] || 50;
+
+    const opacity_step = 1 / hide_step;
+    const timeout = hide_time / hide_step;
+
+    const spanStep = detail["spanStep"] || 10;
+    const span = document.body.clientHeight / spanStep;
+    let StartTop = obj.top + (detail["offset"] || 0);
+
+    let opacity = 1;
+    let timer = null;
+    function change() {
+        opacity -= opacity_step;
+        StartTop += span / hide_step;
+        window.style.opacity = opacity.toString();
+        window.style.top = StartTop.toString() +"px";
+        if (opacity <= 0) {
+            clearTimeout(timer);
+            document.body.removeChild(window);
+            return false;
+        }
+        timer = setTimeout(function() {
+            change();
+        }, timeout)
+    }
+    return change();
+}
+
+// ------------------------------------------------------------------------------
 
 function createBackButton(ElementId, double=false) {
     // 更新返回按钮
@@ -33,69 +106,42 @@ function createLinkButton(ElementId, go_url, data={}, double=false) {
     return true
 }
 
-async function AlertMessage(detail={}, style={}) {
+async function MessageInfo(detail={}, className=null) {
     const window = document.createElement("div");
-    window.style.position = "absolute";
-    window.style.textAlign = "center";
-    window.style.height = "auto";
-    window.style.opacity = "0";
+    window.classList.add(className || "defaultMessageInfo");
+
     window.innerText = detail.message;
-
-    window.style.padding = style.padding || "5px";
-    window.style.fontSize = style.fontSize || "16px";
-    window.style.fontWeight = style.fontWeight || "bold";
-    window.style.borderRadius = style.borderRadius || "5px";
-
-    window.style.background = style.background || "#606060";
-    window.style.color = style.color || "#ffffff";
-
-    window.style.top = style.top || "50%";
-    window.style.maxWidth = style.maxWidth || "200px";
-
     document.body.appendChild(window);
 
-    let marginLeft = getComputedStyle(document.body).marginLeft;
-    marginLeft = parseInt(marginLeft.slice(0, marginLeft.length - 2));
-    const windowLeft = document.body.clientWidth - window.clientWidth
-    window.style.left = (windowLeft / 2 + marginLeft).toString() + "px";
+    const CountObj = CountCenterTopAndLeft(window);
 
-    // 显示
-    async function showMessage(timeout) {
-        let i = 0;
-        let timer = null;
-        function change() {
-            i += 1;
-            window.style.opacity = (i / 100).toString();
-            if (i >= 100) {
-                clearTimeout(timer);
-                return false;
-            }
-            timer = setTimeout(function() {
-                change();
-            }, timeout)
-        }
-        return change();
+    await showWindow(window, detail, CountObj);
+    await sleepTime(detail["WaitTime"] || 1000);
+    await hideWindow(window, detail, CountObj);
+}
+
+async function MessageTips(detail={}, className=null) {
+    const window = document.createElement("div");
+    window.classList.add(className || "defaultMessageTips");
+
+    const title = document.createElement("a");
+    title.style.display = "block";
+    title.innerText = detail.title;
+
+    const content = document.createElement("div");
+    content.innerText = detail.message;
+
+    const button = document.createElement("button");
+    button.innerText = "确认";
+
+    window.append(title)
+    window.append(content)
+    window.append(button)
+    document.body.appendChild(window);
+
+    const CountObj = CountCenterTopAndLeft(window);
+    button.onclick = async function() {
+        await hideWindow(window, detail, CountObj);
     }
-
-    async function removeMessage(timeout) {
-        let i = 100;
-        let timer = null;
-        function change() {
-            i -= 1;
-            window.style.opacity = (i / 100).toString();
-            if (i <= 0) {
-                clearTimeout(timer);
-                document.body.removeChild(window);
-                return false;
-            }
-            timer = setTimeout(function() {
-                change();
-            }, timeout)
-        }
-        return change();
-    }
-
-    await showMessage(detail["ShowStep"] || 0.1);
-    await sleepTime(detail["ShowTime"] || 2000);
-    await removeMessage(detail["RemoveStep"] || 1);
+    await showWindow(window, detail, CountObj);
 }

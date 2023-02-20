@@ -1,0 +1,53 @@
+.defaultMessageInfo {
+    position: absolute;
+    text-align: center;
+    height: auto;
+    opacity: 0;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+    background: #606060;
+    color: #ffffff;
+    max-width: 260px;
+}
+
+/* ------------------------------------------------------ */
+
+.defaultMessageTips {
+    position: absolute;
+    height: auto;
+    opacity: 0;
+    background: #606060;
+    max-width: 300px;
+    min-width: 200px;
+}
+
+.defaultMessageTips a {
+    position: relative;
+    user-select: none;
+    font-weight: bold;
+    font-size: 16px;
+    color: #ffffff;
+    margin: 5px;
+    left: 0;
+    top: 0;
+}
+
+.defaultMessageTips div {
+    position: relative;
+    margin: 5px;
+    left: 0;
+    top: 0;
+}
+
+.defaultMessageTips button {
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    margin: 5px;
+    float: right;
+    bottom: 0;
+}
+
+
