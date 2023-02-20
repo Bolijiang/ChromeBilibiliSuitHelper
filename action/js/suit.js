@@ -22,6 +22,7 @@ function UpdateBackgroundImage(image_url) {
 }
 
 async function FanCardClickHandle() {
+    // 加载内容
     const item = ParseFanCardTag(this);
 
     const setFanNumber = SetFanNumber2Page(item["item_id"]);
@@ -36,14 +37,20 @@ async function FanCardClickHandle() {
 }
 
 (async function() {
-    createBackButton("back", false);
+    createBackButton("back", {}, false);
     createLinkButton(FanCardsSort_Id, "sort.html", {}, false);
-
     await BuildFanCards(FanCardClickHandle, false);
 
-    const fanCardTags = GetFanCardsTag();
-    if (fanCardTags.length !== 0) {
-        fanCardTags[0].click();
+    const data = getQueryString("data") || "{}";
+    const item = JSON.parse(decodeURIComponent(data));
+    if (item["item_id"]) {
+        window.location.hash = `#${item["item_id"]}`;
+        document.getElementById(item["item_id"]).click();
+    } else {
+        const fanCardTags = GetFanCardsTag();
+        if (fanCardTags.length !== 0) {
+            fanCardTags[0].click();
+        }
     }
 })();
 

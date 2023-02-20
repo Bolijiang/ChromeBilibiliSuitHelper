@@ -1,8 +1,10 @@
-
+(async function() {
+    const item = JSON.parse(decodeURIComponent(getQueryString("data")));
+    createBackButton("back", {"item_id": item["item_id"]}, false);
+})()
 
 document.getElementById("give-share-fan-number").onclick = async function() {
     const item = JSON.parse(decodeURIComponent(getQueryString("data")));
-
     const res = await contentPage("BuildFanNumberShareUrl", item);
     if (res["code"] !== 0) {
         await MessageInfo({message: res["message"]});

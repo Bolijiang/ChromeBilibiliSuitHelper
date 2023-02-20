@@ -29,7 +29,7 @@
 })();
 
 (async function() {
-    createBackButton("back", false);
+    createBackButton("back", {}, false);
     await BuildFanCards(null, false);
     updateTopButton();
 
@@ -132,10 +132,10 @@ document.getElementById("fan-cards-sort").onclick = async function() {
     }
     const res = await contentPage("ApplyMyFanCardsSort", {ids: ids});
     if (res["code"] !== 0) {
-        alert(res["message"]);
+        await MessageInfo({message: res["message"]});
         return null;
     } else {
-        alert("应用排序成功");
+        await MessageInfo({message: "应用排序成功"});
     }
     if (res["code"] === 0 && FanCardsListSaveLocal) {
         console.log("保存数据到本地");

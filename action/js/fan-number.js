@@ -1,7 +1,3 @@
-(async function() {
-    createLinkButton("fan-number-log", "log.html", {}, false);
-})();
-
 function SetFanNumberList(number_list, item_id) {
     // 我知道你很急，但是你先别急，等会换radio
     function padNumber(num, len) {
@@ -59,6 +55,16 @@ function updaterChooseFanNumber() {
     this.classList.add(FanNumberStataChoose_ClassName);
 }
 
+document.getElementById("fan-number-log").onclick = async function() {
+    const item_id = document.getElementById("content-box").dataset["item_id"];
+    if (!item_id) {
+        await MessageInfo({message: "未指定装扮"});
+        return null;
+    }
+    createLinkButton("fan-number-log", "log.html", {"item_id": item_id});
+    document.getElementById("fan-number-log").click();
+}
+
 document.getElementById("show-fan-number").onclick = async function() {
     const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
     if ((choose || []).length !== 1) {
@@ -105,10 +111,10 @@ document.getElementById("give-fan-number").onclick = async function() {
         await MessageInfo({message: "不能选择正在展示的编号"});
         return null
     }
-    if (choose[0].classList.contains(FanNumberStataNo_ClassName)) {
-        await MessageInfo({message: "不能选择已锁编号"});
-        return null
-    }
+    // if (choose[0].classList.contains(FanNumberStataNo_ClassName)) {
+    //     await MessageInfo({message: "不能选择已锁编号"});
+    //     return null
+    // }
     const item = JSON.parse(choose[0].dataset["item"]);
     createLinkButton("give-fan-number", "give.html", item, false);
     document.getElementById("give-fan-number").click();
