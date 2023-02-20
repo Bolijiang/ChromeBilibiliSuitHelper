@@ -5,7 +5,7 @@ const requestUtils = {
         for(let key in params || {}) {
             UrlReturn += `${key}=${params[key]}&`;
         }
-        return UrlReturn
+        return UrlReturn.slice(0, UrlReturn.length-1);
     },
     buildDataBody: function(form_data) {
         let body_data = "";

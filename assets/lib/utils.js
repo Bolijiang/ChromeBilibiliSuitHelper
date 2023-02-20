@@ -12,3 +12,12 @@ function getQueryString(key) {
     }
     return content[key];
 }
+
+function sleepTime(time) {
+    // 等待时间
+    return new Promise(function(resolve) {
+        setTimeout(function() {
+            resolve();
+        }, time);
+    });
+}

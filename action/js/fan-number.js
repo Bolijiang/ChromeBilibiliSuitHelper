@@ -36,10 +36,9 @@ function SetFanNumberList(number_list, item_id) {
 async function SetFanNumber2Page(item_id) {
     const res = await contentPage("GetMyFanNumInventory", {item_id: item_id});
     if (res["code"] !== 0) {
-        alert(res["message"]);
+        await AlertMessage({message: res["message"]});
         return null;
     }
-
     const fanNumberList = res["data"]["list"] || [];
     SetFanNumberList(fanNumberList, item_id);
 }
@@ -62,22 +61,22 @@ function updaterChooseFanNumber() {
 document.getElementById("show-fan-number").onclick = async function() {
     const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
     if ((choose || []).length !== 1) {
-        console.log("未选择或选择多个")
+        await AlertMessage({message: "未选择或选择多个"});
         return null
     }
     if (choose[0].classList.contains(FanNumberStataShow_ClassName)) {
-        console.log("不能选择正在展示的编号")
+        await AlertMessage({message: "不能选择正在展示的编号"});
         return null
     }
     const item = JSON.parse(choose[0].dataset["item"]);
 
     const res = await contentPage("ShowFanNumToCard", item);
     if (res["code"] !== 0) {
-        alert(res["message"]);
+        await AlertMessage({message: res["message"]});
         return null;
     }
-
-    await document.getElementById("update-fan-cards").click();
+    document.getElementById("update-fan-cards").click();
+    await AlertMessage({message: "展示编号更换成功"});
 }
 
 document.getElementById("update-fan-number").onclick = async function() {
@@ -98,15 +97,15 @@ document.getElementById("update-fan-number").onclick = async function() {
 document.getElementById("give-fan-number").onclick = async function() {
     const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
     if ((choose || []).length !== 1) {
-        console.log("未选择或选择多个")
+        await AlertMessage({message: "未选择或选择多个"});
         return null
     }
     if (choose[0].classList.contains(FanNumberStataShow_ClassName)) {
-        console.log("不能选择正在展示的编号")
+        await AlertMessage({message: "不能选择正在展示的编号"});
         return null
     }
     if (choose[0].classList.contains(FanNumberStataNo_ClassName)) {
-        alert("不能选择已锁编号")
+        await AlertMessage({message: "不能选择已锁编号"});
         return null
     }
     const item = JSON.parse(choose[0].dataset["item"]);
