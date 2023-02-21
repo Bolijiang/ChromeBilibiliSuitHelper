@@ -1,5 +1,18 @@
 const VerifyFanNumber = false;
 
+function GetTagUserId() {
+    // 获取选则的用户uid
+    const user_list = document.getElementsByName("user");
+    let mid = null;
+    for (let i = 0; i < user_list.length; i++) {
+        if (user_list[i].checked === true) {
+            mid = user_list[i].previousElementSibling.dataset["uid"];
+            break;
+        }
+    }
+    return mid
+}
+
 async function verifyFanNumber(item) {
     const res = await contentPage("GetMyFanNumInventory", item);
     const fanNumberList = res["data"]["list"] || [];
@@ -20,40 +33,42 @@ async function verifyFanNumber(item) {
     return finish;
 }
 
-function createUserTag(item) {
-    const content = document.createElement("li");
-    content.className = "user";
 
-    content.onclick = async function() {
-        const radio = this.getElementsByTagName("input")[0];
-        radio.checked = true;
-    }
-
-    const face = document.createElement("img");
-    face.src = item["face"];
-
-    const name = document.createElement("span");
-    name.innerText = item["uname"] || item["name"];
-
-    const info = document.createElement("a");
-    info.dataset["uid"] = item["mid"].toString();
-    info.innerText = "详情";
-    info.onclick = async function() {
-        const uid = this.dataset["uid"];
-        await MessageInfo({message: `[${uid}]`});
-    }
-
-    const radio = document.createElement("input");
-    radio.type = "radio";
-    radio.name = "user";
-
-    content.append(face);
-    content.append(name);
-    content.append(info);
-    content.append(radio);
-    return content
-}
 function SetUserTags2Page(followersList) {
+    function createUserTag(item) {
+        const content = document.createElement("li");
+        content.className = "user";
+
+        content.onclick = async function() {
+            const radio = this.getElementsByTagName("input")[0];
+            radio.checked = true;
+        }
+
+        const face = document.createElement("img");
+        face.src = item["face"];
+
+        const name = document.createElement("span");
+        name.innerText = item["uname"] || item["name"];
+
+        const info = document.createElement("a");
+        info.dataset["uid"] = item["mid"].toString();
+        info.innerText = "详情";
+        info.onclick = async function() {
+            const uid = this.dataset["uid"];
+            await MessageInfo({message: `[${uid}]`});
+        }
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "user";
+
+        content.append(face);
+        content.append(name);
+        content.append(info);
+        content.append(radio);
+        return content
+    }
+
     const root = document.getElementById("user-list");
     for (let i = 0; i < followersList.length; i++) {
         const tag = createUserTag(followersList[i]);
@@ -112,7 +127,7 @@ async function LoadScrollHandler() {
                 return null;
             }
             root.innerHTML = "";
-            root.append(createUserTag(res["card"]));
+            SetUserTags2Page([res["card"]]);
         } else {
             await MessageInfo({message: "UID格式不正确"});
             return null;
@@ -121,8 +136,6 @@ async function LoadScrollHandler() {
 }
 
 (async function() {
-    await LoadScrollHandler();
-
     const item = JSON.parse(decodeURIComponent(getQueryString("data")));
     createBackButton("back", item, false);
 
@@ -134,6 +147,8 @@ async function LoadScrollHandler() {
             return null
         }
     }
+
+    await LoadScrollHandler();
 })()
 
 
@@ -168,5 +183,36 @@ document.getElementById("give-share-fan-number").onclick = async function() {
 }
 
 document.getElementById("give-others-fan-number").onclick = async function() {
-    await MessageInfo({message: "此方法无法撤回"});
+    const item = JSON.parse(decodeURIComponent(getQueryString("data")));
+
+    const mid = GetTagUserId();
+    if (!mid) {
+        await MessageInfo({message: "未选择用户"});
+        return null;
+    }
+
+    const relationRes = await contentPage("GetUserRelation", {mid: mid});
+    if (relationRes["code"] !== 0) {
+        await MessageInfo({message: relationRes["message"]});
+        return null;
+    }
+
+    const attribute = relationRes["data"]["be_relation"]["attribute"];
+    const mtime = relationRes["data"]["be_relation"]["mtime"];
+
+    if (attribute !== 1 && attribute !== 2 && attribute !== 6) {
+        await MessageInfo({message: "选择的用户未关注你"});
+        return null;
+    }
+
+    if (!await verifyFanNumber(item)) {
+        await MessageInfo({message: `[${item["fan_num"]}]此编号无法赠送或不存在`});
+        return null;
+    }
+
+    const next = await MessageJudge({
+        message: "是否继续", wait_time: 5000,
+    })
+
+    console.log(next)
 }

@@ -16,22 +16,13 @@
 
 .defaultMessageTips {
     position: absolute;
-    height: auto;
     opacity: 0;
-    background: #606060;
+    background: #202020;
+    border-radius: 10px;
+    border: 2px solid #606060;
     max-width: 300px;
     min-width: 200px;
-}
-
-.defaultMessageTips a {
-    position: relative;
-    user-select: none;
-    font-weight: bold;
-    font-size: 16px;
-    color: #ffffff;
-    margin: 5px;
-    left: 0;
-    top: 0;
+    outline: none;
 }
 
 .defaultMessageTips div {
@@ -50,4 +41,31 @@
     bottom: 0;
 }
 
+/* -------------------------------------------- */
 
+.defaultMessageJudge {
+    position: absolute;
+    opacity: 0;
+    background: #202020;
+    border-radius: 10px;
+    border: 2px solid #606060;
+    max-width: 300px;
+    min-width: 200px;
+    outline: none;
+}
+
+.defaultMessageJudge div {
+    position: relative;
+    margin: 5px;
+    left: 0;
+    top: 0;
+}
+
+.defaultMessageJudge button {
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    margin: 5px;
+    float: right;
+    bottom: 0;
+}

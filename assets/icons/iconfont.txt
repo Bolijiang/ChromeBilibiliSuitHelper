@@ -3,3 +3,4 @@ refresh.png https://www.iconfont.cn/collections/detail?cid=14008
 back.png https://www.iconfont.cn/collections/detail?cid=42993
 options.png https://www.iconfont.cn/collections/detail?cid=14008
 reverse.png https://www.iconfont.cn/collections/detail?cid=41824
+close.png https://www.iconfont.cn/collections/detail?cid=42993

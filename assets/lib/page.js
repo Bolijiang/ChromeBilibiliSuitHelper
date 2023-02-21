@@ -8,7 +8,30 @@ function CountCenterTopAndLeft(window) {
     return {left: windowLeft / 2 + marginLeft, top: windowTop / 2 + marginTop}
 }
 
-async function showWindow(window, detail, obj) {
+async function waitButton(button, title, detail) {
+    let wait_time = detail["wait_time"] || 0;
+    let timer = null;
+    let i = 0;
+    function change() {
+        button.innerText = (i+1).toString();
+        button.disabled = true;
+
+        if (i >= wait_time / 1000) {
+            clearTimeout(timer);
+            button.disabled = false;
+            button.innerText = title;
+            button.style.cursor = "pointer";
+            return false;
+        }
+        timer = setTimeout(function() {
+            change();
+        }, 1000);
+        i += 1;
+    }
+    return change();
+}
+
+async function showWindow(window, detail, obj, type="info") {
     const show_time = detail["ShowTime"] || 300;
     const show_step = detail["ShowStep"] || 50;
 
@@ -17,10 +40,15 @@ async function showWindow(window, detail, obj) {
 
     const spanStep = detail["spanStep"] || 10;
     const span = document.body.clientHeight / spanStep;
-    let StartTop = obj.top + span + (detail["offset"] || 0);
+
+    let StartTop = span + (detail["offset"] || 0);
+
+    if (type === "info") {
+        StartTop = obj.top + span + (detail["offset"] || 0);
+        window.style.left = obj.left.toString() + "px";
+    }
 
     window.style.top = StartTop.toString() + "px";
-    window.style.left = obj.left.toString() + "px";
 
     let opacity = 0;
     let timer = null;
@@ -40,7 +68,7 @@ async function showWindow(window, detail, obj) {
     return change();
 }
 
-async function hideWindow(window, detail, obj) {
+async function hideWindow(window, detail, obj, type="info") {
     const hide_time = detail["HideTime"] || 300;
     const hide_step = detail["HideStep"] || 50;
 
@@ -49,7 +77,12 @@ async function hideWindow(window, detail, obj) {
 
     const spanStep = detail["spanStep"] || 10;
     const span = document.body.clientHeight / spanStep;
-    let StartTop = obj.top + (detail["offset"] || 0);
+
+    let StartTop = 0;
+
+    if (type === "info") {
+        StartTop = obj.top + (detail["offset"] || 0);
+    }
 
     let opacity = 1;
     let timer = null;
@@ -60,7 +93,9 @@ async function hideWindow(window, detail, obj) {
         window.style.top = StartTop.toString() +"px";
         if (opacity <= 0) {
             clearTimeout(timer);
-            document.body.removeChild(window);
+            if (type === "info") {
+                document.body.removeChild(window);
+            }
             return false;
         }
         timer = setTimeout(function() {
@@ -113,33 +148,92 @@ async function MessageInfo(detail={}, className=null) {
 
     const CountObj = CountCenterTopAndLeft(window);
 
-    await showWindow(window, detail, CountObj);
+    await showWindow(window, detail, CountObj, "info");
     await sleepTime(detail["WaitTime"] || 1000);
-    await hideWindow(window, detail, CountObj);
+    await hideWindow(window, detail, CountObj, "info");
 }
 
 async function MessageTips(detail={}, className=null) {
-    const window = document.createElement("div");
+    const window = document.createElement("dialog");
+    window.classList.add("MessageTips");
     window.classList.add(className || "defaultMessageTips");
 
-    const title = document.createElement("a");
-    title.style.display = "block";
-    title.innerText = detail.title;
-
     const content = document.createElement("div");
-    content.innerText = detail.message;
+    content.innerHTML = detail.message;
 
     const button = document.createElement("button");
-    button.innerText = "确认";
+    button.style.cursor = "default";
+    button.disabled = true;
 
-    window.append(title)
-    window.append(content)
-    window.append(button)
+    window.append(content);
+    window.append(button);
     document.body.appendChild(window);
+
+    window.showModal();
 
     const CountObj = CountCenterTopAndLeft(window);
     button.onclick = async function() {
-        await hideWindow(window, detail, CountObj);
+        await hideWindow(window, detail, CountObj, "tips");
+        window.close();
+        document.body.removeChild(window);
     }
-    await showWindow(window, detail, CountObj);
+
+    await showWindow(window, detail, CountObj, "tips");
+
+    await waitButton(button, "确认", detail);
+
+    return new Promise(async function(resolve, _) {
+        window.onclose = function() {
+            resolve(true);
+        }
+    });
+}
+
+async function MessageJudge(detail={}, className=null) {
+    const window = document.createElement("dialog");
+    window.classList.add("MessageJudge");
+    window.classList.add(className || "defaultMessageJudge");
+
+    const content = document.createElement("div");
+    content.innerHTML = detail.message;
+
+    const NoButton = document.createElement("button");
+    NoButton.innerText = "取消";
+
+    const YesButton = document.createElement("button");
+    YesButton.style.cursor = "default";
+    YesButton.disabled = true;
+
+    window.append(content);
+    window.append(YesButton);
+    window.append(NoButton);
+    document.body.appendChild(window);
+
+    window.showModal();
+
+    let return_bool = null;
+
+    const CountObj = CountCenterTopAndLeft(window);
+    YesButton.onclick = async function() {
+        await hideWindow(window, detail, CountObj, "tips");
+        window.close();
+        document.body.removeChild(window);
+        return_bool = true;
+    }
+    NoButton.onclick = async function() {
+        await hideWindow(window, detail, CountObj, "tips");
+        window.close();
+        document.body.removeChild(window);
+        return_bool = false;
+    }
+
+    await showWindow(window, detail, CountObj, "tips");
+
+    await waitButton(YesButton, "确认", detail);
+
+    return new Promise(async function(resolve, _) {
+        window.onclose = function() {
+            resolve(return_bool);
+        }
+    });
 }
