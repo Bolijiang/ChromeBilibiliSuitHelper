@@ -98,7 +98,7 @@ async function LoadUserList() {
                 const attribute = relationRes["data"]["be_relation"]["attribute"];
                 const mtime = relationRes["data"]["be_relation"]["mtime"];
                 const userPage = createUserInfoAsk(othersInfoPes["card"], attribute, mtime);
-                await MessageTips({message: userPage});
+                await MessageTips({message: userPage, box: "dialog-user"});
             }
             const radio = document.createElement("input");
             radio.type = "radio";
@@ -281,7 +281,7 @@ document.getElementById("give-others-fan-number").onclick = async function() {
 
     const userPage = createUserInfoAsk(othersInfoPes["card"], attribute, mtime)
     const user_judge = await MessageJudge(
-        {message: userPage, wait_time: 5000, box: "dialog-user"}
+        {message: userPage, wait_time: 3000, box: "dialog-user"}
     );
     if (!user_judge) {
         return null;
