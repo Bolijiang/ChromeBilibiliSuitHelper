@@ -92,6 +92,7 @@ document.getElementById("show-fan-number").onclick = async function() {
 }
 
 document.getElementById("update-fan-number").onclick = async function() {
+    // 更新编号库存
     let item_id = document.getElementById("content-box").dataset["item_id"];
     if (!item_id) {
         const fanCardTags = GetFanCardsTag();
@@ -107,6 +108,7 @@ document.getElementById("update-fan-number").onclick = async function() {
 }
 
 document.getElementById("give-fan-number").onclick = async function() {
+    // 赠送编号
     const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
     if ((choose || []).length !== 1) {
         await MessageInfo({message: "未选择或选择多个"});

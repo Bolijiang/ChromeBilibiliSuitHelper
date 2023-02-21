@@ -81,7 +81,7 @@ function SetUserTags2Page(followersList) {
             const attribute = relationRes["data"]["be_relation"]["attribute"];
             const mtime = relationRes["data"]["be_relation"]["mtime"];
 
-            const userPage = createUserInfoPage(othersInfoPes["card"], attribute, mtime);
+            const userPage = createUserInfoAsk(othersInfoPes["card"], attribute, mtime);
             await MessageTips({message: userPage});
         }
 
@@ -194,7 +194,7 @@ document.getElementById("give-share-fan-number").onclick = async function() {
     }
 
     const assets = suitAssetsRes["data"]["item"];
-    const fanNumberPage = createSuitFanNumberInfoPage(assets, item["fan_num"]);
+    const fanNumberPage = createFanNumberAsk(assets, item["fan_num"]);
     const suit_judge = await MessageJudge(
         {message: fanNumberPage, wait_time: 5000, box: "dialog-suit"}
     );
@@ -274,7 +274,7 @@ document.getElementById("give-others-fan-number").onclick = async function() {
 
     await MessageInfo({message: "确认所选用户是否正确", WaitTime: 1000});
 
-    const userPage = createUserInfoPage(othersInfoPes["card"], attribute, mtime)
+    const userPage = createUserInfoAsk(othersInfoPes["card"], attribute, mtime)
     const user_judge = await MessageJudge(
         {message: userPage, wait_time: 5000, box: "dialog-user"}
     );
@@ -287,7 +287,7 @@ document.getElementById("give-others-fan-number").onclick = async function() {
         return null;
     }
     const assets = suitAssetsRes["data"]["item"];
-    const fanNumberPage = createSuitFanNumberInfoPage(assets, item["fan_num"]);
+    const fanNumberPage = createFanNumberAsk(assets, item["fan_num"]);
     const suit_judge = await MessageJudge(
         {message: fanNumberPage, wait_time: 5000, box: "dialog-suit"}
     );
