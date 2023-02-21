@@ -1,4 +1,4 @@
-const VerifyFanNumber = false;
+const StartVerifyFanNumber = true;
 
 function GetTagUserId() {
     // 获取选则的用户uid
@@ -156,7 +156,7 @@ async function LoadScrollHandler() {
     const item = JSON.parse(decodeURIComponent(getQueryString("data")));
     createBackButton("back", item, false);
 
-    if (VerifyFanNumber) {
+    if (StartVerifyFanNumber) {
         const verify = verifyFanNumber(item);
         if (await verify === false) {
             await MessageInfo({message: "验证不通过, 将返回上一页"});
@@ -215,7 +215,8 @@ document.getElementById("give-share-fan-number").onclick = async function() {
             await MessageInfo({message: "链接已复制到剪贴板"});
         },
         async function() {
-            await MessageInfo({message: `无法复制到剪贴板\n交易链接:\n${shareUrl}`});
+            // 不急慢慢来, 等会改
+            await MessageTips({message: `无法复制到剪贴板\n交易链接:\n${shareUrl}`});
         }
     );
 }

@@ -1,15 +1,5 @@
 
 
 async function test() {
-    const res = await contentPage("GetSuitAssets", {item_id: "4664"});
-    const page = createSuitFanNumberInfoPage(res["data"]["item"], 8848);
-
-    const res1 = await MessageJudge(
-        {
-            message: page,
-            wait_time: 5000,
-            box: "dialog-suit"
-        },
-    );
-    console.log(res1)
+    await MessageTips({message: `无法复制到剪贴板\n交易链接:\n${1111111111111111111111111111111}`});
 }

@@ -116,10 +116,10 @@ document.getElementById("give-fan-number").onclick = async function() {
         await MessageInfo({message: "不能选择正在展示的编号"});
         return null
     }
-    // if (choose[0].classList.contains(FanNumberStataNo_ClassName)) {
-    //     await MessageInfo({message: "不能选择已锁编号"});
-    //     return null
-    // }
+    if (choose[0].classList.contains(FanNumberStataNo_ClassName)) {
+        await MessageInfo({message: "不能选择已锁编号"});
+        return null
+    }
     const item = JSON.parse(choose[0].dataset["item"]);
     createLinkButton("give-fan-number", "give.html", item, false);
     document.getElementById("give-fan-number").click();
