@@ -264,7 +264,7 @@ async function MessageTips(detail={}, className=null) {
     window.classList.add(className || "defaultMessageDialog");
 
     const content = document.createElement("div");
-    content.className = detail.box || "dialog-user";
+    content.className = detail.box || "";
     content.innerHTML = detail.message;
 
     const button = document.createElement("button");
@@ -299,7 +299,7 @@ async function MessageJudge(detail={}, className=null) {
     window.classList.add(className || "defaultMessageDialog");
 
     const content = document.createElement("div");
-    content.className = detail.box || "dialog-user";
+    content.className = detail.box || "";
     content.innerHTML = detail.message;
 
     const NoButton = document.createElement("button");
@@ -321,15 +321,10 @@ async function MessageJudge(detail={}, className=null) {
     const CountObj = CountCenterTopAndLeft(window);
     YesButton.onclick = async function() {
         await hideWindow(window, detail, CountObj, "tips");
-        window.close();
-        document.body.removeChild(window);
         return_bool = true;
     }
     NoButton.onclick = async function() {
         await hideWindow(window, detail, CountObj, "tips");
-        window.close();
-        document.body.removeChild(window);
-        return_bool = false;
     }
 
     await showWindow(window, detail, CountObj, "tips");
