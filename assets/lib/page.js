@@ -325,6 +325,7 @@ async function MessageJudge(detail={}, className=null) {
     }
     NoButton.onclick = async function() {
         await hideWindow(window, detail, CountObj, "tips");
+        return_bool = false;
     }
 
     await showWindow(window, detail, CountObj, "tips");
