@@ -5,11 +5,6 @@ const FanNumberList_Id = "fan-number-list";
 
 const BackgroundImageOpacity = 0.6;
 
-const FanNumberStataShow_ClassName = "fan-number-state-show";
-const FanNumberStataNo_ClassName = "fan-number-state-no";
-const FanNumberStataYes_ClassName = "fan-number-state-yes";
-const FanNumberStataChoose_ClassName = "fan-number-state-choose";
-
 const UpdateBgOpacity_Id = "update-bg-opacity";
 
 function UpdateBackgroundImage(image_url) {

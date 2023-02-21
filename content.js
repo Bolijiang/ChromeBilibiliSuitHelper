@@ -68,6 +68,17 @@ const biliApi = {
         return cookie
     },
 
+    GetMyFollowers: async function(message) {
+        // 获取粉丝列表
+        const url = "https://api.bilibili.com/x/relation/followers";
+        const cookies = await biliApi.GetCookies({type: "json"});
+        const vmid = cookies["DedeUserID"];
+        const params = {"vmid": vmid, "pn": message.pn || 1, "ps": message.ps || 20};
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
+    },
+
     GetMyFanCards: async function(message) {
         // 获取自己拥有的装扮 
         const url = "https://api.bilibili.com/x/garb/user/suit/asset/list";
@@ -88,6 +99,7 @@ const biliApi = {
             {method: "GET", url: url, params: params}
         );
     },
+
     GetSuitAssets: async function(message) {
         // 获取装扮的内容
         const url = "https://api.bilibili.com/x/garb/user/suit/asset";
@@ -96,6 +108,7 @@ const biliApi = {
             {method: "GET", url: url, params: params}
         );
     },
+
     GetSuitOrderList: async function(message) {
         // 获取订单
         const url = "https://api.live.bilibili.com/xlive/revenue/v1/order/getMainOrderList";
@@ -108,16 +121,27 @@ const biliApi = {
         );
     },
 
+    GetOthersInfo: async function(message) {
+        // 获取其他人基础信息
+        const url = "https://account.bilibili.com/api/member/getCardByMid";
+        const params = {"mid": message.mid || ""};
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
+    },
+
+    GetUserRelation: async function(message) {
+        // 查询目标用户关系
+        const url = "https://api.bilibili.com/x/space/acc/relation";
+        const params = {"mid": message.mid || ""};
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
+    },
+
     // GetMyPreviewAssets: async function(message) {
     //     // 获取自己装扮类所有信息
     //     return await request("GET", "https://api.bilibili.com/x/garb/user/preview/asset/list");
-    // },
-    //
-    // GetOthersInfo: async function(message) {
-    //     // 获取其他人基础信息
-    //     const url = "https://account.bilibili.com/api/member/getCardByMid";
-    //     const params = {"mid": message.mid || ""};
-    //     return await request("GET", url, params);
     // },
     //
     // GetMyInfo: async function(message) {

@@ -14,10 +14,17 @@
             <button id="back">
                 <img src="/assets/icons/back.png">
             </button>
+            <input id="user-search" type="text" placeholder="目标用户id">
         </div>
-    </div>
-    <div>
-        <button id="give-share-fan-number" title="通过链接形式">赠送编号</button>
+        <div class="user-list-content" id="user-list-scroll">
+            <form>
+                <ul id="user-list"></ul>
+            </form>
+        </div>
+        <div class="give-button-box">
+            <button id="give-share-fan-number" title="通过链接赠送">生成交易链接</button>
+            <button id="give-others-fan-number" title="通过选择用户赠送">赠送指定用户</button>
+        </div>
     </div>
     <script src="js/give.js"></script>
 </body>

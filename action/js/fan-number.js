@@ -1,3 +1,8 @@
+const FanNumberStataShow_ClassName = "fan-number-state-show";
+const FanNumberStataNo_ClassName = "fan-number-state-no";
+const FanNumberStataYes_ClassName = "fan-number-state-yes";
+const FanNumberStataChoose_ClassName = "fan-number-state-choose";
+
 function SetFanNumberList(number_list, item_id) {
     // 我知道你很急，但是你先别急，等会换radio
     function padNumber(num, len) {
