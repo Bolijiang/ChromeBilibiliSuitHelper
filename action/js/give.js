@@ -1,4 +1,4 @@
-const StartVerifyFanNumber = true;
+const StartVerifyFanNumber = false;
 
 function GetTagUserId() {
     // 获取选则的用户uid
@@ -71,8 +71,18 @@ function SetUserTags2Page(followersList) {
         info.dataset["uid"] = item["mid"].toString();
         info.innerText = "详情";
         info.onclick = async function() {
-            const uid = this.dataset["uid"];
-            await MessageInfo({message: `[${uid}]`});
+            const mid = this.dataset["uid"];
+            const relationPromise = contentPage("GetUserRelation", {mid: mid});
+            const othersInfoPromise = contentPage("GetOthersInfo", {mid: mid});
+
+            const relationRes = await relationPromise;
+            const othersInfoPes = await othersInfoPromise;
+
+            const attribute = relationRes["data"]["be_relation"]["attribute"];
+            const mtime = relationRes["data"]["be_relation"]["mtime"];
+
+            const userPage = createUserInfoPage(othersInfoPes["card"], attribute, mtime);
+            await MessageTips({message: userPage});
         }
 
         const radio = document.createElement("input");
@@ -203,7 +213,7 @@ document.getElementById("give-share-fan-number").onclick = async function() {
     let shareUrl = `${url}/${item["item_id"]}?${share_param}`;
 
     const res1 = await contentPage("BuildShortLinkUrl", {url: shareUrl});
-    if (res1["code"] === 0) {
+    if (res1["code"] !== 0) {
         await MessageInfo({message: `无法生成短链接\n${res1["message"]}`});
     }
     if (!res1["data"]["content"]) {
