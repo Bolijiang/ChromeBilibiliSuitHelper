@@ -40,3 +40,13 @@ function formatTime(time, format) {
     format = format.replace("s", ss.toString());
     return format
 }
+
+function ParseUrlQueryData() {
+    const data = getQueryString("data");
+    const deData = decodeURIComponent(data);
+    try {
+        return JSON.parse(deData);
+    } catch (err) {
+        return null;
+    }
+}

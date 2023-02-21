@@ -36,8 +36,8 @@ async function FanCardClickHandle() {
     createLinkButton(FanCardsSort_Id, "sort.html", {}, false);
     await BuildFanCards(FanCardClickHandle, false);
 
-    const data = getQueryString("data") || "{}";
-    const item = JSON.parse(decodeURIComponent(data));
+    const item = ParseUrlQueryData() || {};
+
     if (item["item_id"]) {
         window.location.hash = `#${item["item_id"]}`;
         document.getElementById(item["item_id"]).click();

@@ -1,7 +1,5 @@
-const StartVerifyFanNumber = false;
-
-function GetTagUserId() {
-    // 获取选则的用户uid
+async function GetChooseGiveUserId() {
+    // 获取选中的用户id
     const user_list = document.getElementsByName("user");
     let mid = null;
     for (let i = 0; i < user_list.length; i++) {
@@ -10,10 +8,28 @@ function GetTagUserId() {
             break;
         }
     }
-    return mid
+
+    if (mid === null) {
+        await MessageInfo({message: "未选择用户"});
+        return null;
+    }
+
+    return mid;
 }
 
-async function verifyFanNumber(item) {
+async function getUrlDateItem(auto_back=true) {
+    // 获取url的data参数 [return obj or null]
+    const item = ParseUrlQueryData() || {};
+    if ((!item["item_id"] || !item["fan_num"]) && auto_back) {
+        await MessageInfo({message: "url参数不正确, 将返回上一页"});
+        document.getElementById("back").click();
+        return null;
+    }
+    return item
+}
+
+async function verifyFanNumberInventory(item, auto_back=true) {
+    // 验证库存是否存在此编号 [return bool]
     const res = await contentPage("GetMyFanNumInventory", item);
     const fanNumberList = res["data"]["list"] || [];
 
@@ -30,80 +46,77 @@ async function verifyFanNumber(item) {
         }
     }
 
+    if (finish === false && auto_back) {
+        await MessageInfo({message: `[${item["fan_num"]}]库存验证不通过, 将返回上一页`});
+        document.getElementById("back").click();
+        return null;
+    }
+
     return finish;
 }
 
-async function verifySuitAssets(item) {
+async function getVerifySuitAssets(item, auto_back=true) {
+    // 验证所选编号和装扮会话 [return null or obj]
     const suitAssetsPromise = contentPage("GetSuitAssets", item);
     await MessageInfo({message: "确认所选编号是否正确", WaitTime: 1000});
-
     const suitAssetsRes = await suitAssetsPromise;
-
     if (suitAssetsRes["code"] !== 0) {
         await MessageInfo({message: suitAssetsRes["message"]});
         return null;
     }
-    if (!suitAssetsRes["data"]) {
-        await MessageInfo({message: "没有此装扮"});
+    if (!suitAssetsRes["data"] && auto_back) {
+        await MessageInfo({message: "没有此装扮, 将返回上一页"});
+        document.getElementById("back").click();
         return null;
     }
-    return suitAssetsRes;
+    return suitAssetsRes["data"]["item"] || {};
 }
 
-
-function SetUserTags2Page(followersList) {
-    function createUserTag(item) {
-        const content = document.createElement("li");
-        content.className = "user";
-
-        content.onclick = async function() {
-            const radio = this.getElementsByTagName("input")[0];
-            radio.checked = true;
+async function LoadUserList() {
+    // 加载用户列表
+    function SetUserTags2Page(followersList) {
+        function createUserTag(item) {
+            const content = document.createElement("li");
+            content.className = "user";
+            content.onclick = async function() {
+                const radio = this.getElementsByTagName("input")[0];
+                radio.checked = true;
+            }
+            const face = document.createElement("img");
+            face.src = item["face"];
+            const name = document.createElement("span");
+            name.innerText = item["uname"] || item["name"];
+            const info = document.createElement("a");
+            info.dataset["uid"] = item["mid"].toString();
+            info.innerText = "详情";
+            info.onclick = async function() {
+                const mid = this.dataset["uid"];
+                const relationPromise = contentPage("GetUserRelation", {mid: mid});
+                const othersInfoPromise = contentPage("GetOthersInfo", {mid: mid});
+                const relationRes = await relationPromise;
+                const othersInfoPes = await othersInfoPromise;
+                const attribute = relationRes["data"]["be_relation"]["attribute"];
+                const mtime = relationRes["data"]["be_relation"]["mtime"];
+                const userPage = createUserInfoAsk(othersInfoPes["card"], attribute, mtime);
+                await MessageTips({message: userPage});
+            }
+            const radio = document.createElement("input");
+            radio.type = "radio";
+            radio.name = "user";
+            content.append(face);
+            content.append(name);
+            content.append(info);
+            content.append(radio);
+            return content
         }
 
-        const face = document.createElement("img");
-        face.src = item["face"];
-
-        const name = document.createElement("span");
-        name.innerText = item["uname"] || item["name"];
-
-        const info = document.createElement("a");
-        info.dataset["uid"] = item["mid"].toString();
-        info.innerText = "详情";
-        info.onclick = async function() {
-            const mid = this.dataset["uid"];
-            const relationPromise = contentPage("GetUserRelation", {mid: mid});
-            const othersInfoPromise = contentPage("GetOthersInfo", {mid: mid});
-
-            const relationRes = await relationPromise;
-            const othersInfoPes = await othersInfoPromise;
-
-            const attribute = relationRes["data"]["be_relation"]["attribute"];
-            const mtime = relationRes["data"]["be_relation"]["mtime"];
-
-            const userPage = createUserInfoAsk(othersInfoPes["card"], attribute, mtime);
-            await MessageTips({message: userPage});
+        const root = document.getElementById("user-list");
+        for (let i = 0; i < followersList.length; i++) {
+            const tag = createUserTag(followersList[i]);
+            root.append(tag);
         }
-
-        const radio = document.createElement("input");
-        radio.type = "radio";
-        radio.name = "user";
-
-        content.append(face);
-        content.append(name);
-        content.append(info);
-        content.append(radio);
-        return content
     }
 
-    const root = document.getElementById("user-list");
-    for (let i = 0; i < followersList.length; i++) {
-        const tag = createUserTag(followersList[i]);
-        root.append(tag);
-    }
-}
-
-async function LoadScrollHandler() {
     const ps = 20;
     let no_more = false;
     let pn = 0;
@@ -163,64 +176,56 @@ async function LoadScrollHandler() {
 }
 
 (async function() {
-    const item = JSON.parse(decodeURIComponent(getQueryString("data")));
+    const item = await getUrlDateItem(true);
+
     createBackButton("back", item, false);
-
-    if (StartVerifyFanNumber) {
-        const verify = verifyFanNumber(item);
-        if (await verify === false) {
-            await MessageInfo({message: "验证不通过, 将返回上一页"});
-            document.getElementById("back").click();
-            return null
-        }
-    }
-
-    await LoadScrollHandler();
+    await verifyFanNumberInventory(item, true);
+    await LoadUserList();
 })()
 
 
 document.getElementById("give-share-fan-number").onclick = async function() {
-    const item = JSON.parse(decodeURIComponent(getQueryString("data")));
+    // * 常规验证 [url参数是否正确, 编号是否正确]
+    const item = await getUrlDateItem(true);
+    await verifyFanNumberInventory(item, true);
 
-    if (!await verifyFanNumber(item)) {
-        // 验证编号是否在库存 or 可用
-        await MessageInfo({message: `[${item["fan_num"]}]无法赠送或不存在`});
+    // * 弹出装扮,编号信息验证会话
+    const suit = await getVerifySuitAssets(item, true);
+    if (!suit) {
         return null;
     }
 
-    const suitAssetsRes = await verifySuitAssets(item);
-    if (!suitAssetsRes) {
-        return null;
-    }
-
-    const assets = suitAssetsRes["data"]["item"];
-    const fanNumberPage = createFanNumberAsk(assets, item["fan_num"]);
-    const suit_judge = await MessageJudge(
-        {message: fanNumberPage, wait_time: 5000, box: "dialog-suit"}
-    );
+    // * 弹出装扮,粉丝编号 验证会话
+    const verifyFanNumberAsk = createFanNumberAsk(suit, item["fan_num"]);
+    const suit_judge = await MessageJudge({message: verifyFanNumberAsk, wait_time: 3000, box: "dialog-suit"});
     if (!suit_judge) {
         return null;
     }
 
-    const res = await contentPage("BuildFanNumberShareUrl", item);
-    if (res["code"] !== 0) {
-        await MessageInfo({message: res["message"]});
+    // * 生成分享share_param
+    const shareRes = await contentPage("BuildFanNumberShareUrl", item);
+    if (shareRes["code"] !== 0) {
+        await MessageInfo({message: shareRes["message"]});
         return null;
     }
 
-    const share_param = res["data"]["share_param"];
-    const url = "https://www.bilibili.com/h5/mall/share/receive"
-    let shareUrl = `${url}/${item["item_id"]}?${share_param}`;
+    // * 拼接领取链接[长链接]
+    const share_url = "https://www.bilibili.com/h5/mall/share/receive"
+    const share_param = shareRes["data"]["share_param"];
+    let shareUrl = `${share_url}/${item["item_id"]}?${share_param}`;
 
-    const res1 = await contentPage("BuildShortLinkUrl", {url: shareUrl});
-    if (res1["code"] !== 0) {
-        await MessageInfo({message: `无法生成短链接\n${res1["message"]}`});
+    // * 尝试长链接转短链接
+    const shortRes = await contentPage("BuildShortLinkUrl", {url: shareUrl});
+    if (shortRes["code"] !== 0) {
+        await MessageInfo({message: `无法生成短链接`});
     }
-    if (!res1["data"]["content"]) {
-        await MessageInfo({message: `无法生成短链接\n${res1["message"]}`});
+    if (!shortRes["data"]["content"]) {
+        await MessageInfo({message: `短链接生成失败`});
     }
-    shareUrl = res1["data"]["content"];
-    navigator.clipboard.writeText(shareUrl).then(
+    shareUrl = shortRes["data"]["content"];
+
+    // * 尝试写入剪贴板
+    await navigator.clipboard.writeText(shareUrl).then(
         async function() {
             await MessageInfo({message: "链接已复制到剪贴板"});
         },
@@ -229,28 +234,35 @@ document.getElementById("give-share-fan-number").onclick = async function() {
             await MessageTips({message: `无法复制到剪贴板\n交易链接:\n${shareUrl}`});
         }
     );
+
+    // * 自动返回
+    await MessageInfo({message: "将自动返回上一页"});
+    document.getElementById("back").click();
 }
 
 document.getElementById("give-others-fan-number").onclick = async function() {
-    const mid = GetTagUserId();
+    // * 常规验证 [url参数是否正确, 编号是否正确]
+    const item = await getUrlDateItem(true);
+    await verifyFanNumberInventory(item, true);
+
+    // * 获取选择的用户id
+    const mid = await GetChooseGiveUserId();
     if (!mid) {
-        await MessageInfo({message: "未选择用户"});
         return null;
     }
-
-    const item = JSON.parse(decodeURIComponent(getQueryString("data")));
     item["to_mid"] = mid;
 
-    const relationPromise = contentPage("GetUserRelation", {mid: mid});
-    const othersInfoPromise = contentPage("GetOthersInfo", {mid: mid});
-
-    const relationRes = await relationPromise;
+    // * 关系验证
+    const relationRes = await contentPage("GetUserRelation", {mid: mid});
     if (relationRes["code"] !== 0) {
         await MessageInfo({message: relationRes["message"]});
         return null;
     }
 
+    // 对你的状态
+    // 对方关注你的时间
     const attribute = relationRes["data"]["be_relation"]["attribute"];
+    const mtime = relationRes["data"]["be_relation"]["mtime"];
 
     if (attribute !== 1 && attribute !== 2 && attribute !== 6) {
         // 验证选择用户是否关注你
@@ -258,19 +270,12 @@ document.getElementById("give-others-fan-number").onclick = async function() {
         return null;
     }
 
-    if (!await verifyFanNumber(item)) {
-        // 验证编号是否在库存 or 可用
-        await MessageInfo({message: `[${item["fan_num"]}]无法赠送或不存在`});
-        return null;
-    }
-
-    const othersInfoPes = await othersInfoPromise;
+    // * 弹出用户信息验证会话
+    const othersInfoPes = await contentPage("GetOthersInfo", {mid: mid});
     if (othersInfoPes["code"] !== 0) {
         await MessageInfo({message: othersInfoPes["message"]});
         return null;
     }
-
-    const mtime = relationRes["data"]["be_relation"]["mtime"];
 
     await MessageInfo({message: "确认所选用户是否正确", WaitTime: 1000});
 
@@ -282,24 +287,28 @@ document.getElementById("give-others-fan-number").onclick = async function() {
         return null;
     }
 
-    const suitAssetsRes = await verifySuitAssets(item);
-    if (!suitAssetsRes) {
+    // * 弹出装扮,粉丝编号 验证会话
+    const suit = await getVerifySuitAssets(item, true);
+    if (!suit) {
         return null;
     }
-    const assets = suitAssetsRes["data"]["item"];
-    const fanNumberPage = createFanNumberAsk(assets, item["fan_num"]);
+    const verifyFanNumberAsk = createFanNumberAsk(suit, item["fan_num"]);
     const suit_judge = await MessageJudge(
-        {message: fanNumberPage, wait_time: 5000, box: "dialog-suit"}
+        {message: verifyFanNumberAsk, wait_time: 5000, box: "dialog-suit"}
     );
     if (!suit_judge) {
         return null;
     }
 
+    // * 赠送装扮给指定用户
     const giveRes = await contentPage("GiveFanNumToOthers", item);
     if (giveRes["code"] !== 0) {
+        // 赠送失败或者其他错误不会自动返回
         await MessageInfo({message: giveRes["message"]});
         return null;
     }
+    // 赠送成功自动返回
+    await MessageInfo({message: "赠送编号成功"});
     await MessageInfo({message: "赠送编号成功"});
     await MessageInfo({message: "将自动返回上一页"});
     document.getElementById("back").click();

@@ -34,7 +34,6 @@ function createLinkButton(ElementId, go_url, data={}, double=false) {
 function createFanNumberAsk(info, fan_num) {
     // 创建粉丝编号确认会话
     const content = document.createElement("div");
-
     const cover = document.createElement("img");
     cover.className = "suit-dialog-cover";
     cover.src = info["properties"]["image_cover"];

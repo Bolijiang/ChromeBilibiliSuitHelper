@@ -30,7 +30,19 @@ function SetFanNumberList(number_list, item_id) {
         tag.dataset["item"] = JSON.stringify({
             "item_id": item_id, "fan_num": item["number"]
         });
-        tag.onclick = updaterChooseFanNumber;
+        tag.onclick = function() {
+            if (this.classList.contains(FanNumberStataChoose_ClassName)) {
+                this.classList.remove(FanNumberStataChoose_ClassName);
+                return null;
+            }
+
+            const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
+            for (let i = 0; i < choose.length; i++) {
+                choose[i].classList.remove(FanNumberStataChoose_ClassName);
+            }
+
+            this.classList.add(FanNumberStataChoose_ClassName);
+        };
         root.append(tag);
     }
 }
@@ -45,22 +57,8 @@ async function SetFanNumber2Page(item_id) {
     SetFanNumberList(fanNumberList, item_id);
 }
 
-function updaterChooseFanNumber() {
-    // 更新选中编号
-    if (this.classList.contains(FanNumberStataChoose_ClassName)) {
-        this.classList.remove(FanNumberStataChoose_ClassName);
-        return null;
-    }
-
-    const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
-    for (let i = 0; i < choose.length; i++) {
-        choose[i].classList.remove(FanNumberStataChoose_ClassName);
-    }
-
-    this.classList.add(FanNumberStataChoose_ClassName);
-}
-
 document.getElementById("fan-number-log").onclick = async function() {
+    // 装扮 赠送/获赠 记录
     const item_id = document.getElementById("content-box").dataset["item_id"];
     if (!item_id) {
         await MessageInfo({message: "未指定装扮"});
@@ -71,6 +69,7 @@ document.getElementById("fan-number-log").onclick = async function() {
 }
 
 document.getElementById("show-fan-number").onclick = async function() {
+    // 展示编号至卡面
     const choose = document.getElementsByClassName(FanNumberStataChoose_ClassName);
     if ((choose || []).length !== 1) {
         await MessageInfo({message: "未选择或选择多个"});
