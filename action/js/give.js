@@ -33,6 +33,23 @@ async function verifyFanNumber(item) {
     return finish;
 }
 
+async function verifySuitAssets(item) {
+    const suitAssetsPromise = contentPage("GetSuitAssets", item);
+    await MessageInfo({message: "确认所选编号是否正确", WaitTime: 1000});
+
+    const suitAssetsRes = await suitAssetsPromise;
+
+    if (suitAssetsRes["code"] !== 0) {
+        await MessageInfo({message: suitAssetsRes["message"]});
+        return null;
+    }
+    if (!suitAssetsRes["data"]) {
+        await MessageInfo({message: "没有此装扮"});
+        return null;
+    }
+    return suitAssetsRes;
+}
+
 
 function SetUserTags2Page(followersList) {
     function createUserTag(item) {
@@ -154,6 +171,27 @@ async function LoadScrollHandler() {
 
 document.getElementById("give-share-fan-number").onclick = async function() {
     const item = JSON.parse(decodeURIComponent(getQueryString("data")));
+
+    if (!await verifyFanNumber(item)) {
+        // 验证编号是否在库存 or 可用
+        await MessageInfo({message: `[${item["fan_num"]}]无法赠送或不存在`});
+        return null;
+    }
+
+    const suitAssetsRes = await verifySuitAssets(item);
+    if (!suitAssetsRes) {
+        return null;
+    }
+
+    const assets = suitAssetsRes["data"]["item"];
+    const fanNumberPage = createSuitFanNumberInfoPage(assets, item["fan_num"]);
+    const suit_judge = await MessageJudge(
+        {message: fanNumberPage, wait_time: 5000, box: "dialog-suit"}
+    );
+    if (!suit_judge) {
+        return null;
+    }
+
     const res = await contentPage("BuildFanNumberShareUrl", item);
     if (res["code"] !== 0) {
         await MessageInfo({message: res["message"]});
@@ -183,36 +221,75 @@ document.getElementById("give-share-fan-number").onclick = async function() {
 }
 
 document.getElementById("give-others-fan-number").onclick = async function() {
-    const item = JSON.parse(decodeURIComponent(getQueryString("data")));
-
     const mid = GetTagUserId();
     if (!mid) {
         await MessageInfo({message: "未选择用户"});
         return null;
     }
 
-    const relationRes = await contentPage("GetUserRelation", {mid: mid});
+    const item = JSON.parse(decodeURIComponent(getQueryString("data")));
+    item["to_mid"] = mid;
+
+    const relationPromise = contentPage("GetUserRelation", {mid: mid});
+    const othersInfoPromise = contentPage("GetOthersInfo", {mid: mid});
+
+    const relationRes = await relationPromise;
     if (relationRes["code"] !== 0) {
         await MessageInfo({message: relationRes["message"]});
         return null;
     }
 
     const attribute = relationRes["data"]["be_relation"]["attribute"];
-    const mtime = relationRes["data"]["be_relation"]["mtime"];
 
     if (attribute !== 1 && attribute !== 2 && attribute !== 6) {
+        // 验证选择用户是否关注你
         await MessageInfo({message: "选择的用户未关注你"});
         return null;
     }
 
     if (!await verifyFanNumber(item)) {
-        await MessageInfo({message: `[${item["fan_num"]}]此编号无法赠送或不存在`});
+        // 验证编号是否在库存 or 可用
+        await MessageInfo({message: `[${item["fan_num"]}]无法赠送或不存在`});
         return null;
     }
 
-    const next = await MessageJudge({
-        message: "是否继续", wait_time: 5000,
-    })
+    const othersInfoPes = await othersInfoPromise;
+    if (othersInfoPes["code"] !== 0) {
+        await MessageInfo({message: othersInfoPes["message"]});
+        return null;
+    }
 
-    console.log(next)
+    const mtime = relationRes["data"]["be_relation"]["mtime"];
+
+    await MessageInfo({message: "确认所选用户是否正确", WaitTime: 1000});
+
+    const userPage = createUserInfoPage(othersInfoPes["card"], attribute, mtime)
+    const user_judge = await MessageJudge(
+        {message: userPage, wait_time: 5000, box: "dialog-user"}
+    );
+    if (!user_judge) {
+        return null;
+    }
+
+    const suitAssetsRes = await verifySuitAssets(item);
+    if (!suitAssetsRes) {
+        return null;
+    }
+    const assets = suitAssetsRes["data"]["item"];
+    const fanNumberPage = createSuitFanNumberInfoPage(assets, item["fan_num"]);
+    const suit_judge = await MessageJudge(
+        {message: fanNumberPage, wait_time: 5000, box: "dialog-suit"}
+    );
+    if (!suit_judge) {
+        return null;
+    }
+
+    const giveRes = await contentPage("GiveFanNumToOthers", item);
+    if (giveRes["code"] !== 0) {
+        await MessageInfo({message: giveRes["message"]});
+        return null;
+    }
+    await MessageInfo({message: "赠送编号成功"});
+    await MessageInfo({message: "将自动返回上一页"});
+    document.getElementById("back").click();
 }

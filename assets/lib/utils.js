@@ -10,7 +10,7 @@ function getQueryString(key) {
         const key = items[i].split("=")[0];
         content[key] = items[i].split("=")[1];
     }
-    return content[key];
+    return content[key] || "";
 }
 
 function sleepTime(time) {
@@ -20,4 +20,23 @@ function sleepTime(time) {
             resolve();
         }, time);
     });
+}
+
+function formatTime(time, format) {
+    // 格式化时间
+    const date = new Date(time * 1000);
+
+    const YY = date.getFullYear();
+    const MM = (date.getMonth() + 1 < 10 ? '0'+(date.getMonth() + 1) : date.getMonth() + 1);
+    const DD = (date.getDate() < 10 ? '0'+date.getDate() : date.getDate());
+    const hh = (date.getHours() < 10 ? '0'+date.getHours() : date.getHours());
+    const mm = (date.getMinutes() < 10 ? '0'+date.getMinutes() : date.getMinutes());
+    const ss = (date.getSeconds() < 10 ? '0'+date.getSeconds() : date.getSeconds());
+    format = format.replace("Y", YY.toString());
+    format = format.replace("M", MM.toString());
+    format = format.replace("D", DD.toString());
+    format = format.replace("h", hh.toString());
+    format = format.replace("m", mm.toString());
+    format = format.replace("s", ss.toString());
+    return format
 }

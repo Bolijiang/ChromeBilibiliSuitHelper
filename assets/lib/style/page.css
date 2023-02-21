@@ -14,58 +14,241 @@
 
 /* ------------------------------------------------------ */
 
-.defaultMessageTips {
+.MessageDialog,
+.MessageDialog {
     position: absolute;
     opacity: 0;
     background: #202020;
     border-radius: 10px;
     border: 2px solid #606060;
     max-width: 300px;
-    min-width: 200px;
     outline: none;
 }
 
-.defaultMessageTips div {
+.MessageDialog div,
+.MessageDialog div {
     position: relative;
-    margin: 5px;
     left: 0;
     top: 0;
 }
 
-.defaultMessageTips button {
+.MessageDialog button,
+.MessageDialog button {
+    outline: none;
     position: relative;
     user-select: none;
     cursor: pointer;
-    margin: 5px;
+    margin-left: 5px;
+    margin-top: 10px;
     float: right;
     bottom: 0;
+    width: auto;
+    min-width: 45px;
+    height: 25px;
+    background: transparent;
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 3px;
 }
 
-/* -------------------------------------------- */
 
-.defaultMessageJudge {
+/* 预设用户信息 --------------------------------------- */
+
+.defaultMessageDialog .dialog-user {
+    position: relative;
+    height: 165px;
+    width: 200px;
+    border: 1px solid #606060;
+    border-radius: 5px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-face,
+.defaultMessageDialog .dialog-user .user-dialog-name,
+.defaultMessageDialog .dialog-user .user-dialog-uid,
+.defaultMessageDialog .dialog-user .user-dialog-sex,
+.defaultMessageDialog .dialog-user .user-dialog-birthday,
+.defaultMessageDialog .dialog-user .user-dialog-relational,
+.defaultMessageDialog .dialog-user .user-dialog-follow,
+.defaultMessageDialog .dialog-user .user-dialog-registration,
+.defaultMessageDialog .dialog-user .user-dialog-sign {
+    position: relative;
+    display: block;
+    float: left;
+    color: white;
+}
+
+
+.defaultMessageDialog .dialog-user .user-dialog-name,
+.defaultMessageDialog .dialog-user .user-dialog-sign {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-name,
+.defaultMessageDialog .dialog-user .user-dialog-uid,
+.defaultMessageDialog .dialog-user .user-dialog-relational,
+.defaultMessageDialog .dialog-user .user-dialog-follow,
+.defaultMessageDialog .dialog-user .user-dialog-registration,
+.defaultMessageDialog .dialog-user .user-dialog-sign {
+    margin-top: 5px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-name,
+.defaultMessageDialog .dialog-user .user-dialog-uid {
+    margin-left: 8px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-uid,
+.defaultMessageDialog .dialog-user .user-dialog-sex,
+.defaultMessageDialog .dialog-user .user-dialog-birthday,
+.defaultMessageDialog .dialog-user .user-dialog-relational,
+.defaultMessageDialog .dialog-user .user-dialog-follow,
+.defaultMessageDialog .dialog-user .user-dialog-registration,
+.defaultMessageDialog .dialog-user .user-dialog-sign {
+    font-size: 10px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-sex,
+.defaultMessageDialog .dialog-user .user-dialog-birthday,
+.defaultMessageDialog .dialog-user .user-dialog-relational,
+.defaultMessageDialog .dialog-user .user-dialog-follow,
+.defaultMessageDialog .dialog-user .user-dialog-registration,
+.defaultMessageDialog .dialog-user .user-dialog-sign {
+    margin-left: 5px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-face {
+    width: 50px;
+    height: 50px;
+    top: 5px;
+    left: 5px;
+    border-radius: 5px;
+    user-select: none;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-name {
+    font-weight: bold;
+    font-size: 18px;
+    width: 137px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-uid {
+    font-weight: bold;
+    font-size: 12px;
+    width: 137px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-sex {
+    margin-top: 10px;
+    width: 60px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-birthday {
+    margin-top: 10px;
+    width: 125px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-relational {
+    width: 190px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-follow {
+    width: 190px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-registration {
+    width: 190px;
+}
+
+.defaultMessageDialog .dialog-user .user-dialog-sign {
+    width: 190px;
+}
+
+/* 预设装扮编号信息 --------------------------------------- */
+
+.defaultMessageDialog .dialog-suit {
+    position: relative;
+    height: 100px;
+    width: 200px;
+    border: 1px solid #606060;
+    border-radius: 5px;
+}
+
+.defaultMessageDialog .dialog-suit .suit-dialog-cover {
+    height: 100%; width: 100%;
+    background-size: cover;
+    user-select: none;
     position: absolute;
-    opacity: 0;
-    background: #202020;
-    border-radius: 10px;
-    border: 2px solid #606060;
-    max-width: 300px;
-    min-width: 200px;
-    outline: none;
-}
-
-.defaultMessageJudge div {
-    position: relative;
-    margin: 5px;
-    left: 0;
+    object-fit: cover;
     top: 0;
+    left: 0;
+    opacity: 0.6;
+    z-index: -1;
 }
 
-.defaultMessageJudge button {
+.defaultMessageDialog .dialog-suit .suit-dialog-name {
     position: relative;
+    display: block;
+    float: left;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    top: 5px;
+    left: 5px;
+    max-width: 180px;
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-radius: 3px;
     user-select: none;
-    cursor: pointer;
-    margin: 5px;
-    float: right;
-    bottom: 0;
+}
+
+.defaultMessageDialog .dialog-suit .suit-dialog-item_id {
+    position: absolute;
+    display: block;
+    float: left;
+    color: white;
+    font-size: 10px;
+    top: 30px;
+    left: 5px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    user-select: none;
+}
+
+.defaultMessageDialog .dialog-suit .suit-dialog-fan_number {
+    position: absolute;
+    display: block;
+    float: left;
+    color: red;
+    top: 50px;
+    left: 5px;
+    font-weight: bold;
+    font-size: 16px;
+    background-color: #ffffff;
+    border-radius: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid red;
+    user-select: none;
+}
+
+.defaultMessageDialog .dialog-suit .suit-dialog-message {
+    padding-left: 5px;
+    padding-right: 5px;
+    position: absolute;
+    display: block;
+    float: left;
+    color: red;
+    top: 80px;
+    left: 5px;
+    font-size: 8px;
+    background-color: rgba(0, 0, 0, 0.5);
+    user-select: none;
 }

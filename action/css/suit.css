@@ -45,6 +45,7 @@ body {
     height: calc(100% - 30px);
     width: 405px;
     background-size: cover;
+    object-fit: cover;
     user-select: none;
     opacity: 0.8;
 }

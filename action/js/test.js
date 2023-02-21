@@ -1,11 +1,15 @@
 
 
-document.getElementById("test").onclick = async function() {
-    const res = await MessageJudge(
+async function test() {
+    const res = await contentPage("GetSuitAssets", {item_id: "4664"});
+    const page = createSuitFanNumberInfoPage(res["data"]["item"], 8848);
+
+    const res1 = await MessageJudge(
         {
-            message: "你好你好你好你好你好你好你你好你好你好你好你好你好你好你好你好你好",
-            title: "玉玉了", wait_time: 5000,
+            message: page,
+            wait_time: 5000,
+            box: "dialog-suit"
         },
     );
-    console.log(res)
+    console.log(res1)
 }
