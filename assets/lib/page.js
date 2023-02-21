@@ -93,9 +93,10 @@ async function hideWindow(window, detail, obj, type="info") {
         window.style.top = StartTop.toString() +"px";
         if (opacity <= 0) {
             clearTimeout(timer);
-            if (type === "info") {
-                document.body.removeChild(window);
+            if (type !== "info") {
+                window.close();
             }
+            document.body.removeChild(window);
             return false;
         }
         timer = setTimeout(function() {
@@ -279,8 +280,6 @@ async function MessageTips(detail={}, className=null) {
     const CountObj = CountCenterTopAndLeft(window);
     button.onclick = async function() {
         await hideWindow(window, detail, CountObj, "tips");
-        window.close();
-        document.body.removeChild(window);
     }
 
     await showWindow(window, detail, CountObj, "tips");
