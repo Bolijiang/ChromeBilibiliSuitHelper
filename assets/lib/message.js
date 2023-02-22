@@ -4,10 +4,10 @@ async function MessageInfo(detail={}, className=null) {
     window.classList.add(className || "defaultMessageInfo");
     window.innerText = detail.message;
 
-    const message = new Message(window, detail, "info");
-    await message.showWindow();
+    const message = new MessageAnimation(window, detail, "info");
+    await message.changeWindow("show");
     await sleepTime(detail["WaitTime"] || 1000);
-    await message.hideWindow();
+    await message.changeWindow("hide");
 }
 
 async function MessageTips(detail={}, className=null) {
@@ -24,14 +24,14 @@ async function MessageTips(detail={}, className=null) {
     window.append(content);
     window.append(button);
 
-    const message = new Message(window, detail, "tips");
+    const message = new MessageAnimation(window, detail, "tips");
 
     message.window.showModal();
 
     button.onclick = async function() {
-        await message.hideWindow();
+        await message.changeWindow("hide");
     }
-    await message.showWindow();
+    await message.changeWindow("show");
 
     await waitButton(button, detail["ButtonTitle"] || "确认", detail["wait_time"]);
     return new Promise(async function(resolve, _) {
@@ -58,19 +58,19 @@ async function MessageJudge(detail={}, className=null) {
     window.append(YesButton);
     window.append(NoButton);
 
-    const message = new Message(window, detail, "tips");
+    const message = new MessageAnimation(window, detail, "tips");
 
     message.window.showModal();
     let return_bool = null;
     YesButton.onclick = async function() {
-        await message.hideWindow();
+        await message.changeWindow("hide");
         return_bool = true;
     }
     NoButton.onclick = async function() {
-        await message.hideWindow();
+        await message.changeWindow("hide");
         return_bool = false;
     }
-    await message.showWindow();
+    await message.changeWindow("show");
 
     await waitButton(YesButton, detail["YesButtonTitle"] || "确认", detail["wait_time"]);
     return new Promise(async function(resolve, _) {

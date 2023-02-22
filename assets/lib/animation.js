@@ -14,52 +14,54 @@ function getIndex(el) {
     return index
 }
 
-function sortCss(el, prop, val) {
-    let style = el && el.style;
+class SortAnimation {
+    // 排序动画
+    static sortCss(el, prop, val) {
+        let style = el && el.style;
 
-    if (style) {
-        if (val === void 0) {
-            if (document.defaultView && document.defaultView.getComputedStyle) {
-                val = document.defaultView.getComputedStyle(el, '');
-            } else if (el["currentStyle"]) {
-                val = el["currentStyle"];
+        if (style) {
+            if (val === void 0) {
+                if (document.defaultView && document.defaultView.getComputedStyle) {
+                    val = document.defaultView.getComputedStyle(el, '');
+                } else if (el["currentStyle"]) {
+                    val = el["currentStyle"];
+                }
+                return prop === void 0 ? val : val[prop];
+            } else {
+                if (!(prop in style)) {
+                    prop = '-webkit-' + prop;
+                }
+                style[prop] = val + (typeof val === 'string' ? '' : 'px')
             }
-            return prop === void 0 ? val : val[prop];
-        } else {
-            if (!(prop in style)) {
-                prop = '-webkit-' + prop;
-            }
-            style[prop] = val + (typeof val === 'string' ? '' : 'px')
         }
     }
-}
 
-function sortAnimate(prevRect, target, timeout=300) {
-    let currentRect = target.getBoundingClientRect()
-    if (prevRect.nodeType === 1) {
-        prevRect = prevRect.getBoundingClientRect()
+    static sortAnimate(prevRect, target, timeout=300) {
+        let currentRect = target.getBoundingClientRect()
+        if (prevRect.nodeType === 1) {
+            prevRect = prevRect.getBoundingClientRect()
+        }
+        SortAnimation.sortCss(target, 'transition', 'none')
+        SortAnimation.sortCss(target, 'transform', 'translate3d(' +
+            (prevRect.left - currentRect.left) + 'px,' +
+            (prevRect.top - currentRect.top) + 'px,0)'
+        );
+
+        target.offsetWidth;
+
+        SortAnimation.sortCss(target, 'transition', 'all ' + timeout + 'ms');
+        SortAnimation.sortCss(target, 'transform', 'translate3d(0,0,0)');
+
+        clearTimeout(target.animated);
+        target.animated = setTimeout(function() {
+            SortAnimation.sortCss(target, 'transition', '');
+            SortAnimation.sortCss(target, 'transform', '');
+            target.animated = false;
+        }, timeout);
     }
-    sortCss(target, 'transition', 'none')
-    sortCss(target, 'transform', 'translate3d(' +
-        (prevRect.left - currentRect.left) + 'px,' +
-        (prevRect.top - currentRect.top) + 'px,0)'
-    );
-
-    target.offsetWidth;
-
-    sortCss(target, 'transition', 'all ' + timeout + 'ms');
-    sortCss(target, 'transform', 'translate3d(0,0,0)');
-
-    clearTimeout(target.animated);
-    target.animated = setTimeout(function() {
-        sortCss(target, 'transition', '');
-        sortCss(target, 'transform', '');
-        target.animated = false;
-    }, timeout);
 }
 
-
-class Message {
+class MessageAnimation {
     constructor(window, detail, type="info") {
         document.body.appendChild(window);
 
@@ -112,7 +114,7 @@ class Message {
         this.window.style.top = this.top.toString() +"px";
     }
 
-    changeWindow(method="show") {
+    async changeWindow(method="show") {
         // 改变窗口动画
         let timer = null;
         let method_number, timeout, step, opacity_step;
@@ -146,16 +148,6 @@ class Message {
             }, timeout)
         }
         return change(this);
-    }
-
-    async showWindow() {
-        // 显示会话
-        return this.changeWindow("show");
-    }
-
-    async hideWindow() {
-        // 关闭会话
-        return this.changeWindow("hide");
     }
 }
 

@@ -22,8 +22,8 @@
             } else {
                 target.parentNode.insertBefore(drag, target);
             }
-            sortAnimate(dragRect, drag);
-            sortAnimate(targetRect, target);
+            SortAnimation.sortAnimate(dragRect, drag);
+            SortAnimation.sortAnimate(targetRect, target);
         }
 	};
 })();
@@ -75,8 +75,8 @@ function updateTopButton() {
         const targetRect = target.getBoundingClientRect();
         const dragRect = drag.getBoundingClientRect();
         target.parentNode.insertBefore(drag, target);
-        sortAnimate(dragRect, drag);
-        sortAnimate(targetRect, target);
+        SortAnimation.sortAnimate(dragRect, drag);
+        SortAnimation.sortAnimate(targetRect, target);
     }
     function BottomFunc(eve) {
         const drag = eve.target.parentNode.parentNode.parentNode;
@@ -85,8 +85,8 @@ function updateTopButton() {
         const targetRect = target.getBoundingClientRect();
         const dragRect = drag.getBoundingClientRect();
         target.parentNode.insertBefore(drag, target);
-        sortAnimate(dragRect, drag);
-        sortAnimate(targetRect, target);
+        SortAnimation.sortAnimate(dragRect, drag);
+        SortAnimation.sortAnimate(targetRect, target);
     }
 
     let cards = GetFanCardsTag();
