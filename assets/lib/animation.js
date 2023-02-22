@@ -58,18 +58,110 @@ function sortAnimate(prevRect, target, timeout=300) {
     }, timeout);
 }
 
-function getTopAndLeft(window) {
-    let marginLeft = getComputedStyle(document.body).marginLeft;
-    marginLeft = parseInt(marginLeft.slice(0, marginLeft.length - 2));
-    const windowLeft = document.body.clientWidth - window.clientWidth;
-    let marginTop = getComputedStyle(document.body).marginTop;
-    marginTop = parseInt(marginTop.slice(0, marginTop.length - 2));
-    const windowTop = document.body.clientHeight - window.clientHeight;
-    return {left: windowLeft / 2 + marginLeft, top: windowTop / 2 + marginTop}
+
+class Message {
+    constructor(window, detail, type="info") {
+        document.body.appendChild(window);
+
+        this.window = window;
+        this.detail = detail;
+
+        const spanStep = this.detail["spanStep"] || 10;
+
+        this.span = document.body.clientHeight / spanStep;
+        this.opacity = 0;
+
+        this.show_time = this.detail["ShowTime"] || 300;
+        this.show_step = this.detail["ShowStep"] || 50;
+        this.show_opacity_step = 1 / this.show_step;
+        this.show_timeout = this.show_time / this.show_step;
+
+        this.hide_time = this.detail["HideTime"] || 300;
+        this.hide_step = this.detail["HideStep"] || 50;
+        this.hide_opacity_step = 1 / this.hide_step;
+        this.hide_timeout = this.hide_time / this.hide_step;
+
+        let StartTop = this.span + (detail["offset"] || 0);
+        const obj = this.getTopAndLeft(window);
+        if (type === "info") {
+            StartTop = obj.top + this.span + (this.detail["offset"] || 0);
+            this.window.style.left = obj.left.toString() + "px";
+        }
+        this.window.style.top = StartTop.toString() + "px";
+
+        this.top = StartTop;
+        this.type = type;
+    }
+
+    getTopAndLeft() {
+        // 获取居中定位
+        let marginLeft = getComputedStyle(document.body).marginLeft;
+        marginLeft = parseInt(marginLeft.slice(0, marginLeft.length - 2));
+        const windowLeft = document.body.clientWidth - this.window.clientWidth;
+        let marginTop = getComputedStyle(document.body).marginTop;
+        marginTop = parseInt(marginTop.slice(0, marginTop.length - 2));
+        const windowTop = document.body.clientHeight - this.window.clientHeight;
+        return {left: windowLeft / 2 + marginLeft, top: windowTop / 2 + marginTop}
+    }
+
+    changeStyle(opacity_step, step, method_number) {
+        // 改变样式
+        this.opacity += opacity_step * method_number;
+        this.top -= (this.span / step) * method_number;
+        this.window.style.opacity = this.opacity.toString();
+        this.window.style.top = this.top.toString() +"px";
+    }
+
+    changeWindow(method="show") {
+        // 改变窗口动画
+        let timer = null;
+        let method_number, timeout, step, opacity_step;
+
+        if (method !== "show" && method !== "hide") {
+            throw new Error("method is error");
+        }
+
+        opacity_step = (method === "show") ? this.show_opacity_step: this.hide_opacity_step;
+        timeout = (method === "show") ? this.show_timeout: this.hide_timeout;
+        step = (method === "show") ? this.show_step: this.hide_step;
+        method_number = (method === "show") ? 1: -1;
+
+        function change(self) {
+            self.changeStyle(opacity_step, step, method_number)
+            if (self.opacity >= 1 && method === "show") {
+                clearTimeout(timer);
+                return false;
+            }
+
+            if (self.opacity <= 0 && method === "hide") {
+                clearTimeout(timer);
+                if (self.type !== "info") {
+                    self.window.close();
+                }
+                document.body.removeChild(self.window);
+                return false;
+            }
+            timer = setTimeout(function() {
+                change(self);
+            }, timeout)
+        }
+        return change(this);
+    }
+
+    async showWindow() {
+        // 显示会话
+        return this.changeWindow("show");
+    }
+
+    async hideWindow() {
+        // 关闭会话
+        return this.changeWindow("hide");
+    }
 }
 
-async function waitButton(button, title, detail) {
-    let wait_time = detail["wait_time"] || 0;
+async function waitButton(button, title, time) {
+    // 等待按钮
+    let wait_time = time || 0;
     let timer = null;
     let i = Math.floor(wait_time / 1000);
     function change() {
@@ -87,85 +179,6 @@ async function waitButton(button, title, detail) {
             change();
         }, 1000);
         i -= 1;
-    }
-    return change();
-}
-
-async function showWindow(window, detail, type="info") {
-    const show_time = detail["ShowTime"] || 300;
-    const show_step = detail["ShowStep"] || 50;
-
-    const opacity_step = 1 / show_step;
-    const timeout = show_time / show_step;
-
-    const spanStep = detail["spanStep"] || 10;
-    const span = document.body.clientHeight / spanStep;
-
-    let StartTop = span + (detail["offset"] || 0);
-
-    const obj = getTopAndLeft(window);
-
-    if (type === "info") {
-        StartTop = obj.top + span + (detail["offset"] || 0);
-        window.style.left = obj.left.toString() + "px";
-    }
-
-    window.style.top = StartTop.toString() + "px";
-
-    let opacity = 0;
-    let timer = null;
-    function change() {
-        opacity += opacity_step;
-        StartTop -= span / show_step;
-        window.style.opacity = opacity.toString();
-        window.style.top = StartTop.toString() +"px";
-        if (opacity >= 1) {
-            clearTimeout(timer);
-            return false;
-        }
-        timer = setTimeout(function() {
-            change();
-        }, timeout)
-    }
-    return change();
-}
-
-async function hideWindow(window, detail, type="info") {
-    const hide_time = detail["HideTime"] || 300;
-    const hide_step = detail["HideStep"] || 50;
-
-    const opacity_step = 1 / hide_step;
-    const timeout = hide_time / hide_step;
-
-    const spanStep = detail["spanStep"] || 10;
-    const span = document.body.clientHeight / spanStep;
-
-    let StartTop = 0;
-
-    const obj = getTopAndLeft(window);
-
-    if (type === "info") {
-        StartTop = obj.top + (detail["offset"] || 0);
-    }
-
-    let opacity = 1;
-    let timer = null;
-    function change() {
-        opacity -= opacity_step;
-        StartTop += span / hide_step;
-        window.style.opacity = opacity.toString();
-        window.style.top = StartTop.toString() +"px";
-        if (opacity <= 0) {
-            clearTimeout(timer);
-            if (type !== "info") {
-                window.close();
-            }
-            document.body.removeChild(window);
-            return false;
-        }
-        timer = setTimeout(function() {
-            change();
-        }, timeout)
     }
     return change();
 }

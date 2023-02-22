@@ -3,10 +3,11 @@ async function MessageInfo(detail={}, className=null) {
     const window = document.createElement("div");
     window.classList.add(className || "defaultMessageInfo");
     window.innerText = detail.message;
-    document.body.appendChild(window);
-    await showWindow(window, detail, "info");
+
+    const message = new Message(window, detail, "info");
+    await message.showWindow();
     await sleepTime(detail["WaitTime"] || 1000);
-    await hideWindow(window, detail, "info");
+    await message.hideWindow();
 }
 
 async function MessageTips(detail={}, className=null) {
@@ -22,15 +23,19 @@ async function MessageTips(detail={}, className=null) {
     button.disabled = true;
     window.append(content);
     window.append(button);
-    document.body.appendChild(window);
-    window.showModal();
+
+    const message = new Message(window, detail, "tips");
+
+    message.window.showModal();
+
     button.onclick = async function() {
-        await hideWindow(window, detail, "tips");
+        await message.hideWindow();
     }
-    await showWindow(window, detail, "tips");
-    await waitButton(button, detail["ButtonTitle"] || "确认", detail);
+    await message.showWindow();
+
+    await waitButton(button, detail["ButtonTitle"] || "确认", detail["wait_time"]);
     return new Promise(async function(resolve, _) {
-        window.onclose = function() {
+        message.window.onclose = function() {
             resolve(true);
         }
     });
@@ -52,21 +57,24 @@ async function MessageJudge(detail={}, className=null) {
     window.append(content);
     window.append(YesButton);
     window.append(NoButton);
-    document.body.appendChild(window);
-    window.showModal();
+
+    const message = new Message(window, detail, "tips");
+
+    message.window.showModal();
     let return_bool = null;
     YesButton.onclick = async function() {
-        await hideWindow(window, detail, "judge");
+        await message.hideWindow();
         return_bool = true;
     }
     NoButton.onclick = async function() {
-        await hideWindow(window, detail, "judge");
+        await message.hideWindow();
         return_bool = false;
     }
-    await showWindow(window, detail, "judge");
-    await waitButton(YesButton, detail["YesButtonTitle"] || "确认", detail);
+    await message.showWindow();
+
+    await waitButton(YesButton, detail["YesButtonTitle"] || "确认", detail["wait_time"]);
     return new Promise(async function(resolve, _) {
-        window.onclose = function() {
+        message.window.onclose = function() {
             resolve(return_bool);
         }
     });

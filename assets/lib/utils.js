@@ -41,8 +41,8 @@ function formatTime(time, format) {
     return format
 }
 
-function ParseUrlQueryData() {
-    const data = getQueryString("data");
+function ParseUrlQueryData(key="data") {
+    const data = getQueryString(key);
     const deData = decodeURIComponent(data);
     try {
         return JSON.parse(deData);

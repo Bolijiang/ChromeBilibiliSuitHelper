@@ -5,14 +5,12 @@ const FanNumberList_Id = "fan-number-list";
 
 const BackgroundImageOpacity = 0.6;
 
-const UpdateBgOpacity_Id = "update-bg-opacity";
-
 function UpdateBackgroundImage(image_url) {
     // 更新背景
     const img = document.getElementById(ContentItemBoxBg_Id);
     img.src = image_url;
     img.style.opacity = BackgroundImageOpacity.toString();
-    const bgOpacity = document.getElementById(UpdateBgOpacity_Id);
+    const bgOpacity = document.getElementById("update-bg-opacity");
     bgOpacity.value = BackgroundImageOpacity * 100
 }
 
@@ -36,7 +34,7 @@ async function FanCardClickHandle() {
     createLinkButton(FanCardsSort_Id, "sort.html", {}, false);
     await BuildFanCards(FanCardClickHandle, false);
 
-    const item = ParseUrlQueryData() || {};
+    const item = ParseUrlQueryData("data") || {};
 
     if (item["item_id"]) {
         window.location.hash = `#${item["item_id"]}`;
@@ -50,7 +48,8 @@ async function FanCardClickHandle() {
 })();
 
 
-document.getElementById(UpdateBgOpacity_Id).onchange = async function() {
+document.getElementById("update-bg-opacity").onchange = async function() {
+    // 设置背景图片透明度
     const img = document.getElementById(ContentItemBoxBg_Id);
     img.style.opacity = (parseInt(this.value) / 100).toString();
     this.style.opacity = ((parseInt(this.value) / 100) || 0.2).toString();

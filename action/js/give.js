@@ -8,18 +8,16 @@ async function GetChooseGiveUserId() {
             break;
         }
     }
-
     if (mid === null) {
         await MessageInfo({message: "未选择用户"});
         return null;
     }
-
     return mid;
 }
 
 async function getUrlDateItem(auto_back=true) {
     // 获取url的data参数 [return obj or null]
-    const item = ParseUrlQueryData() || {};
+    const item = ParseUrlQueryData("data") || {};
     if ((!item["item_id"] || !item["fan_num"]) && auto_back) {
         await MessageInfo({message: "url参数不正确, 将返回上一页"});
         document.getElementById("back").click();
