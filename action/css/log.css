@@ -1,0 +1,203 @@
+@font-face {
+    font-family: "fansCard";
+    src:url("/assets/fonts/fansCard.ttf");
+}
+
+body {
+    width: 300px;
+    height: 500px;
+    margin: 5px;
+}
+
+#background {
+    position: absolute;
+    z-index: -1;
+    height: 500px;
+    width: 300px;
+    background-size: cover;
+    object-fit: cover;
+    user-select: none;
+}
+
+.log-title {
+    position: relative;
+    height: 25px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+#back {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    background: transparent;
+    float: left;
+    border-style: none;
+    outline: none;
+    user-select: none;
+}
+
+#back img {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    left: 0;
+    top: 0;
+}
+
+#replace {
+    position: relative;
+    width: 25px;
+    height: 25px;
+    cursor: pointer;
+    background: transparent;
+    float: right;
+    border-style: none;
+    outline: none;
+    user-select: none;
+}
+
+#replace img {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 0;
+    top: 2px;
+}
+
+#replace[data-type="out"] img {
+    transform: scaleY(-1);
+}
+
+#replace[data-type="get"] img {
+    transform: scaleY(1);
+}
+
+/* -------------------------------------------- */
+
+#log-list-scroll {
+    width: 100%;
+    height: 475px;
+    background-color: transparent;
+    overflow: auto;
+}
+
+#log-list-scroll::-webkit-scrollbar {
+    width: 5px;
+}
+
+#log-list-scroll::-webkit-scrollbar-thumb {
+    width: 5px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+/* ------------------------------------------- */
+
+#log-list {
+    list-style: none;
+    font-size: 0;
+}
+
+#log-list li {
+    font-size: 16px;
+    width: 295px;
+    height: 65px;
+    position: relative;
+    right: 40px;
+    cursor: default;
+
+    background-color: rgba(32, 32, 32, 0.7);
+
+    border-top: 2px solid #ffffff;
+}
+
+#log-list li span {
+    position: absolute;
+    display: block;
+    height: 18px;
+    line-height: 18px;
+    font-size: 15px;
+}
+
+/* ----------------------- */
+
+.out-log li .text_1 {
+    user-select: none;
+    border: 1px solid transparent;
+    color: white;
+    left: 5px;
+    top: 5px;
+}
+
+.out-log li .fan-number {
+    top: 5px;
+    font-family: "fansCard", serif;
+    color: red;
+    text-decoration: line-through white;
+    border: 1px solid white;
+    border-radius: 5px;
+    left: 40px;
+    width: 80px;
+    text-align: center;
+}
+
+.out-log li .get-time {
+    border: 1px solid transparent;
+    width: 145px;
+    color: white;
+    top: 25px;
+    left: 5px;
+}
+
+.out-log li .text_2 {
+    color: white;
+    top: 25px;
+    left: 150px;
+    user-select: none;
+}
+
+.out-log li .text_3 {
+    color: white;
+    top: 45px;
+    left: 5px;
+    user-select: none;
+}
+
+.out-log li .get-name {
+    cursor: pointer;
+    color: white;
+    top: 45px;
+    left: 60px;
+    text-decoration: underline;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 135px;
+    text-overflow: ellipsis;
+}
+
+.out-log li button {
+    position: absolute;
+    border-style: none;
+    right: 5px;
+    width: 55px;
+    height: 30px;
+    top: 18px;
+    border-radius: 5px;
+}
+
+.out-log li a {
+    cursor: pointer;
+    position: absolute;
+    user-select: none;
+    border: 1px solid transparent;
+    display: block;
+    color: white;
+    text-decoration: underline;
+    top: 5px;
+    left: 125px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 12px;
+}

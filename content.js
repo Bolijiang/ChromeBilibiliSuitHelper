@@ -139,6 +139,28 @@ const biliApi = {
         );
     },
 
+    GetOutFanNumberList: async function(message) {
+        // 获取赠送列表
+        const url = "https://api.bilibili.com/x/garb/user/fannum/present/out/list";
+        const params = {"item_id": message.item_id || ""};
+        return await request(
+            {method: "GET", url: url, params: params}
+        );
+    },
+
+    CancelOutFanNumber: async function(message) {
+        // 取消赠送
+        const cookies = await biliApi.GetCookies({type: "json"});
+        const url = "https://api.bilibili.com/x/garb/user/fannum/present/cancel";
+        const formData = {
+            "present_token": message.token, "csrf": cookies["bili_jct"],
+        };
+        return await request(
+            {method: "POST", url: url},
+            {data: formData}
+        );
+    },
+
     // GetMyPreviewAssets: async function(message) {
     //     // 获取自己装扮类所有信息
     //     return await request("GET", "https://api.bilibili.com/x/garb/user/preview/asset/list");

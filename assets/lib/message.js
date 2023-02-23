@@ -16,7 +16,7 @@ async function MessageTips(detail={}, className=null) {
     window.classList.add("MessageDialog");
     window.classList.add(className || "defaultMessageDialog");
     const content = document.createElement("div");
-    content.className = detail.box || "";
+    content.className = detail.box || "dialog-text";
     content.innerHTML = detail.message;
     const button = document.createElement("button");
     button.style.cursor = "default";
@@ -47,7 +47,7 @@ async function MessageJudge(detail={}, className=null) {
     window.classList.add("MessageDialog");
     window.classList.add(className || "defaultMessageDialog");
     const content = document.createElement("div");
-    content.className = detail.box || "";
+    content.className = detail.box || "dialog-text";
     content.innerHTML = detail.message;
     const NoButton = document.createElement("button");
     NoButton.innerText = detail["NoButtonTitle"] || "取消";

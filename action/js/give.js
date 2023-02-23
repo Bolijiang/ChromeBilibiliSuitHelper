@@ -20,7 +20,7 @@ async function getUrlDateItem(auto_back=true) {
     const item = ParseUrlQueryData("data") || {};
     if ((!item["item_id"] || !item["fan_num"]) && auto_back) {
         await MessageInfo({message: "url参数不正确, 将返回上一页"});
-        document.getElementById("back").click();
+        location.replace(`popup.html`);
         return null;
     }
     return item
@@ -83,6 +83,7 @@ async function LoadUserList() {
             const face = document.createElement("img");
             face.src = item["face"];
             const name = document.createElement("span");
+            name.title = item["uname"] || item["name"];
             name.innerText = item["uname"] || item["name"];
             const info = document.createElement("a");
             info.dataset["uid"] = item["mid"].toString();
@@ -215,12 +216,14 @@ document.getElementById("give-share-fan-number").onclick = async function() {
     // * 尝试长链接转短链接
     const shortRes = await contentPage("BuildShortLinkUrl", {url: shareUrl});
     if (shortRes["code"] !== 0) {
-        await MessageInfo({message: `无法生成短链接`});
+        await MessageInfo({message: shortRes["message"]});
     }
-    if (!shortRes["data"]["content"]) {
-        await MessageInfo({message: `短链接生成失败`});
+    if (shortRes["code"] === 0) {
+        if (!shortRes["data"]["content"]) {
+            await MessageInfo({message: `短链接生成失败`});
+        }
+        shareUrl = shortRes["data"]["content"];
     }
-    shareUrl = shortRes["data"]["content"];
 
     // * 尝试写入剪贴板
     await navigator.clipboard.writeText(shareUrl).then(

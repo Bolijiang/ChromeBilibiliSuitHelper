@@ -10,7 +10,7 @@ function getQueryString(key) {
         const key = items[i].split("=")[0];
         content[key] = items[i].split("=")[1];
     }
-    return content[key] || "";
+    return content[key] || null;
 }
 
 function sleepTime(time) {

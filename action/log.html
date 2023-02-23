@@ -8,10 +8,24 @@
     <script src="/assets/lib/chrome.js"></script>
     <script src="/assets/lib/page.js"></script>
     <script src="/assets/lib/message.js"></script>
+    <link rel="stylesheet" href="css/log.css">
 </head>
 <body>
-    <div>
-        别急, 马上
+    <div class="log-box">
+        <img id="background">
+        <div class="log-title">
+            <button id="back">
+                <img src="/assets/icons/back.png">
+            </button>
+            <a id="suit-name">???</a>
+            <button id="replace" data-type="out">
+                <img src="/assets/icons/reverse.png">
+            </button>
+        </div>
+        <div id="log-list-scroll">
+            <ul id="log-list" class="out-log"></ul>
+        </div>
     </div>
+    <script src="js/log.js"></script>
 </body>
 </html>

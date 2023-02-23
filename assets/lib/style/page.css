@@ -252,3 +252,15 @@
     background-color: rgba(0, 0, 0, 0.5);
     user-select: none;
 }
+
+/* 预设文字信息 --------------------------------------- */
+
+.defaultMessageDialog .dialog-text {
+    color: white;
+    position: relative;
+    max-width: 200px;
+    max-height: 300px;
+    border: 1px solid #606060;
+    border-radius: 5px;
+    overflow: hidden;
+}

@@ -1,5 +1,10 @@
 /* 装扮列表 */
 
+@font-face {
+    font-family: "fansCard";
+    src:url("/assets/fonts/fansCard.ttf");
+}
+
 .fan-cards-item-box {
     height: 100%;
     width: 255px;

@@ -102,6 +102,10 @@ body {
     font-size: 16px;
     left: 55px;
     top: 5px;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 155px;
+    text-overflow: ellipsis;
 }
 
 #user-list li a {
