@@ -15,7 +15,7 @@
         "type": "module"
     },
     "action": {
-        "default_popup": "action/popup.html",
+        "default_popup": "action/suit.html",
         "default_title": "玉玉了",
         "default_icon": "assets/icons/popup.png"
     },

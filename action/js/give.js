@@ -310,7 +310,6 @@ document.getElementById("give-others-fan-number").onclick = async function() {
     }
     // 赠送成功自动返回
     await MessageInfo({message: "赠送编号成功"});
-    await MessageInfo({message: "赠送编号成功"});
     await MessageInfo({message: "将自动返回上一页"});
     document.getElementById("back").click();
 }

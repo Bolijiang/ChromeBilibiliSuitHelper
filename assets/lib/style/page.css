@@ -162,7 +162,9 @@
 }
 
 .defaultMessageDialog .dialog-user .user-dialog-sign {
+    height: 16px;
     width: 190px;
+    overflow: hidden;
 }
 
 /* 预设装扮编号信息 --------------------------------------- */

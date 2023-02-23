@@ -16,7 +16,7 @@ function createOutTag(item, item_id) {
     content.append(text1);
     content.append(fan_number);
 
-    if (item["present_mid"] !== item["get_mid"]) {
+    if (item["present_mid"] !== item["get_mid"] && item["state"] !== "presenting") {
         const get_time = document.createElement("span");
         get_time.className = "get-time";
         get_time.innerText = formatTime(item["get_time"], "Y-M-D h:m:s");
@@ -70,12 +70,16 @@ function createOutTag(item, item_id) {
 
     const button = document.createElement("button");
     button.dataset["token"] = item["token"];
-    if (item["present_mid"] === item["get_mid"]) {
+    if (item["present_mid"] === item["get_mid"] && item["state"] === "presenting") {
         button.innerText = "撤回";
         button.disabled = false;
         button.style.cursor = "pointer";
     } else {
-        button.innerText = "被领取";
+        if (item["state"] === "presenting") {
+            button.innerText = "领取中";
+        } else {
+            button.innerText = "被领取";
+        }
         button.disabled = true;
     }
     button.onclick = async function() {
